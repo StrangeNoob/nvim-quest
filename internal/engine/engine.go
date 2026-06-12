@@ -274,8 +274,6 @@ func (s *Simulator) wordBack() {
 
 // Stubs — implemented in later tasks.
 func (s *Simulator) pressSearch(key string) Event                { return Event{EvNone} }
-func (s *Simulator) applyOperator(key string) Event              { s.pendingOp = ""; return Event{EvInvalid} }
-func (s *Simulator) deleteChar()                                 {}
 func (s *Simulator) snapshot()                                   {}
 func (s *Simulator) applyUndo() Event                            { return Event{EvNone} }
 func (s *Simulator) paste() Event                                { return Event{EvNone} }
