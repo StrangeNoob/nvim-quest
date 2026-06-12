@@ -98,3 +98,45 @@ func TestDeleteAndChange(t *testing.T) {
 		})
 	}
 }
+
+func TestYankPasteUndo(t *testing.T) {
+	tests := []struct {
+		name       string
+		buffer     []string
+		cursor     Pos
+		keys       []string
+		wantBuffer []string
+		wantCursor Pos
+	}{
+		{"yy p duplicates line below", []string{"echo"}, Pos{0, 0},
+			[]string{"y", "y", "p"}, []string{"echo", "echo"}, Pos{1, 0}},
+		{"yy j p pastes after other line", []string{"chant", "deep"}, Pos{0, 0},
+			[]string{"y", "y", "j", "p"}, []string{"chant", "deep", "chant"}, Pos{2, 0}},
+		{"2yy p pastes two lines", []string{"a", "b", "c"}, Pos{0, 0},
+			[]string{"2", "y", "y", "p"}, []string{"a", "a", "b", "b", "c"}, Pos{1, 0}},
+		{"p with empty register is a no-op", []string{"a"}, Pos{0, 0},
+			[]string{"p"}, []string{"a"}, Pos{0, 0}},
+		{"u undoes x", []string{"abc"}, Pos{0, 0},
+			[]string{"x", "u"}, []string{"abc"}, Pos{0, 0}},
+		{"u undoes dd", []string{"a", "b"}, Pos{0, 0},
+			[]string{"d", "d", "u"}, []string{"a", "b"}, Pos{0, 0}},
+		{"u undoes whole insert session", []string{"ab"}, Pos{0, 0},
+			[]string{"i", "X", "Y", "esc", "u"}, []string{"ab"}, Pos{0, 0}},
+		{"u with nothing to undo is a no-op", []string{"ab"}, Pos{0, 1},
+			[]string{"u"}, []string{"ab"}, Pos{0, 1}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := New(tt.buffer, tt.cursor)
+			for _, k := range tt.keys {
+				s.Press(k)
+			}
+			if !slices.Equal(s.Buffer, tt.wantBuffer) {
+				t.Errorf("buffer = %q, want %q", s.Buffer, tt.wantBuffer)
+			}
+			if s.Cursor != tt.wantCursor {
+				t.Errorf("cursor = %v, want %v", s.Cursor, tt.wantCursor)
+			}
+		})
+	}
+}

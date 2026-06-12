@@ -128,3 +128,35 @@ func (s *Simulator) yankLines(n int) {
 	end := min(row+n, len(s.Buffer))
 	s.yank = append([]string(nil), s.Buffer[row:end]...)
 }
+
+func (s *Simulator) snapshot() {
+	buf := make([]string, len(s.Buffer))
+	copy(buf, s.Buffer)
+	s.undo = append(s.undo, snapshot{buffer: buf, cursor: s.Cursor})
+}
+
+func (s *Simulator) applyUndo() Event {
+	if len(s.undo) == 0 {
+		return Event{EvNone}
+	}
+	last := s.undo[len(s.undo)-1]
+	s.undo = s.undo[:len(s.undo)-1]
+	s.Buffer = last.buffer
+	s.Cursor = last.cursor
+	return Event{EvEdited}
+}
+
+func (s *Simulator) paste() Event {
+	if len(s.yank) == 0 {
+		return Event{EvNone}
+	}
+	s.snapshot()
+	row := s.Cursor.Row
+	out := make([]string, 0, len(s.Buffer)+len(s.yank))
+	out = append(out, s.Buffer[:row+1]...)
+	out = append(out, s.yank...)
+	out = append(out, s.Buffer[row+1:]...)
+	s.Buffer = out
+	s.Cursor = Pos{row + 1, 0}
+	return Event{EvEdited}
+}

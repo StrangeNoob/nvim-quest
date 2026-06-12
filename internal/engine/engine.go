@@ -274,7 +274,4 @@ func (s *Simulator) wordBack() {
 
 // Stubs — implemented in later tasks.
 func (s *Simulator) pressSearch(key string) Event                { return Event{EvNone} }
-func (s *Simulator) snapshot()                                   {}
-func (s *Simulator) applyUndo() Event                            { return Event{EvNone} }
-func (s *Simulator) paste() Event                                { return Event{EvNone} }
 func (s *Simulator) jumpToMatch(term string, fromNext bool) bool { return false }
