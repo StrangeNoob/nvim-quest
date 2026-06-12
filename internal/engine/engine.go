@@ -271,7 +271,3 @@ func (s *Simulator) wordBack() {
 	}
 	s.Cursor.Col = max(0, col)
 }
-
-// Stubs — implemented in later tasks.
-func (s *Simulator) pressSearch(key string) Event                { return Event{EvNone} }
-func (s *Simulator) jumpToMatch(term string, fromNext bool) bool { return false }
