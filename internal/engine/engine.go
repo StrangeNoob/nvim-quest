@@ -2,6 +2,8 @@
 // it mutates buffer/cursor/mode state and reports what happened.
 package engine
 
+import "strconv"
+
 type Mode int
 
 const (
@@ -59,31 +61,21 @@ func New(lines []string, cursor Pos) *Simulator {
 	return &Simulator{Buffer: buf, Cursor: cursor}
 }
 
-// Pending returns the visible pending state ("d", "3", "g") for the HUD.
+// Pending returns the visible pending state ("d", "3", "3d", "g") for the HUD.
 func (s *Simulator) Pending() string {
 	out := ""
-	if s.pendingCount > 0 {
-		out += itoa(s.pendingCount)
-	}
 	if s.pendingOp != "" {
+		if s.opCount > 1 {
+			out += strconv.Itoa(s.opCount)
+		}
 		out += s.pendingOp
+	} else if s.pendingCount > 0 {
+		out += strconv.Itoa(s.pendingCount)
 	}
 	if s.pendingG {
 		out += "g"
 	}
 	return out
-}
-
-func itoa(n int) string {
-	if n == 0 {
-		return "0"
-	}
-	var b []byte
-	for n > 0 {
-		b = append([]byte{byte('0' + n%10)}, b...)
-		n /= 10
-	}
-	return string(b)
 }
 
 func (s *Simulator) LastSearch() string { return s.lastSearch }

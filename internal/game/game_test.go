@@ -52,3 +52,17 @@ func TestBirdieEarned(t *testing.T) {
 		t.Error("10 three-star clears must earn Birdie")
 	}
 }
+
+func TestActBadge(t *testing.T) {
+	tests := []struct {
+		act  int
+		want string
+	}{
+		{1, "Dojo Graduate"}, {2, "Crypt Conqueror"}, {3, "Grid Runner"}, {4, ""},
+	}
+	for _, tt := range tests {
+		if got := ActBadge(tt.act); got != tt.want {
+			t.Errorf("ActBadge(%d) = %q, want %q", tt.act, got, tt.want)
+		}
+	}
+}

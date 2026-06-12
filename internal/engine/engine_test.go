@@ -51,3 +51,24 @@ func TestNewCopiesBuffer(t *testing.T) {
 		t.Errorf("New must copy the buffer, got %q", s.Buffer[0])
 	}
 }
+
+func TestPendingDisplay(t *testing.T) {
+	s := New([]string{"a b c d e"}, Pos{0, 0})
+	s.Press("3")
+	if got := s.Pending(); got != "3" {
+		t.Errorf("Pending() = %q, want %q", got, "3")
+	}
+	s.Press("d")
+	if got := s.Pending(); got != "3d" {
+		t.Errorf("Pending() = %q, want %q", got, "3d")
+	}
+	s2 := New([]string{"a"}, Pos{0, 0})
+	s2.Press("d")
+	if got := s2.Pending(); got != "d" {
+		t.Errorf("Pending() = %q, want %q", got, "d")
+	}
+	s2.Press("esc")
+	if got := s2.Pending(); got != "" {
+		t.Errorf("Pending() after esc = %q, want empty", got)
+	}
+}
