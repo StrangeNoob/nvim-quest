@@ -1,0 +1,40 @@
+{
+  "id": "005-delete",
+  "title": "Delete with Intent",
+  "topic": "delete",
+  "challenges": [
+    {
+      "id": "005-delete-word",
+      "title": "Delete a word",
+      "objective": "Delete the word extra with dw.",
+      "initial_buffer": ["keep extra text"],
+      "initial_cursor": {"row": 0, "col": 5},
+      "allowed_commands": ["h", "l", "w", "b", "dw", "u"],
+      "success": {"word_deleted": "extra"},
+      "hint": "Place the cursor at the start of extra, then type dw.",
+      "xp": 15
+    },
+    {
+      "id": "005-delete-line",
+      "title": "Delete a line",
+      "objective": "Delete the line REMOVE ME.",
+      "initial_buffer": ["keep this", "REMOVE ME", "keep that"],
+      "initial_cursor": {"row": 0, "col": 0},
+      "allowed_commands": ["j", "k", "dd", "u"],
+      "success": {"line_deleted": "REMOVE ME"},
+      "hint": "Use j to reach the line, then dd.",
+      "xp": 15
+    },
+    {
+      "id": "005-delete-character",
+      "title": "Delete one character",
+      "objective": "Remove the extra x from Vixm.",
+      "initial_buffer": ["Vixm"],
+      "initial_cursor": {"row": 0, "col": 2},
+      "allowed_commands": ["h", "l", "x", "u"],
+      "success": {"buffer_equals": ["Vim"]},
+      "hint": "x deletes the character under the cursor.",
+      "xp": 10
+    }
+  ]
+}
