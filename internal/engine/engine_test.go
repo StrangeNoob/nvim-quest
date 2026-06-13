@@ -72,3 +72,59 @@ func TestPendingDisplay(t *testing.T) {
 		t.Errorf("Pending() after esc = %q, want empty", got)
 	}
 }
+
+func TestAllowedKeysAndInvalid(t *testing.T) {
+	allow := func(keys ...string) map[string]bool {
+		m := map[string]bool{}
+		for _, k := range keys {
+			m[k] = true
+		}
+		return m
+	}
+	t.Run("disallowed normal-mode key is invalid", func(t *testing.T) {
+		s := New([]string{"abc"}, Pos{0, 0})
+		s.AllowedKeys = allow("h", "l")
+		if ev := s.Press("x"); ev.Kind != EvInvalid {
+			t.Errorf("Press(x) = %v, want EvInvalid", ev.Kind)
+		}
+		if s.Buffer[0] != "abc" {
+			t.Errorf("buffer mutated by disallowed key: %q", s.Buffer[0])
+		}
+	})
+	t.Run("esc is never penalized", func(t *testing.T) {
+		s := New([]string{"abc"}, Pos{0, 0})
+		s.AllowedKeys = allow("h")
+		if ev := s.Press("esc"); ev.Kind == EvInvalid {
+			t.Error("esc must not be invalid")
+		}
+	})
+	t.Run("insert typing ignores AllowedKeys", func(t *testing.T) {
+		s := New([]string{""}, Pos{0, 0})
+		s.AllowedKeys = allow("i")
+		s.Press("i")
+		if ev := s.Press("z"); ev.Kind != EvEdited {
+			t.Errorf("insert typing = %v, want EvEdited", ev.Kind)
+		}
+	})
+	t.Run("nil AllowedKeys permits everything", func(t *testing.T) {
+		s := New([]string{"abc"}, Pos{0, 0})
+		if ev := s.Press("x"); ev.Kind != EvEdited {
+			t.Errorf("Press(x) = %v, want EvEdited", ev.Kind)
+		}
+	})
+	t.Run("unknown normal key is invalid", func(t *testing.T) {
+		s := New([]string{"abc"}, Pos{0, 0})
+		if ev := s.Press("Z"); ev.Kind != EvInvalid {
+			t.Errorf("Press(Z) = %v, want EvInvalid", ev.Kind)
+		}
+	})
+	t.Run("disallowed key clears pending operator", func(t *testing.T) {
+		s := New([]string{"abc def"}, Pos{0, 0})
+		s.AllowedKeys = allow("d", "w")
+		s.Press("d")
+		s.Press("q") // invalid
+		if got := s.Pending(); got != "" {
+			t.Errorf("pending = %q, want empty after invalid key", got)
+		}
+	})
+}
