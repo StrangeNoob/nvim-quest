@@ -159,6 +159,53 @@ func TestMapLockAndEnter(t *testing.T) {
 	}
 }
 
+func TestNextActAnnouncementOnBossClear(t *testing.T) {
+	m := newTestModel(t)
+	m.lessonIdx = 3 // act1-04 carries Sensei's Trial
+	m.inBoss = true
+	mm, _ := m.awardBoss()
+	m = mm.(Model)
+	if m.resGameComplete {
+		t.Fatal("the Act I boss is not the finale")
+	}
+	m.scr = screenResults
+	v := m.View()
+	if !strings.Contains(v, "UNLOCKED") || !strings.Contains(v, "THE MOTION CRYPTS") {
+		t.Errorf("boss-clear results should announce the next act; got:\n%s", v)
+	}
+}
+
+func TestFinaleOnFinalBoss(t *testing.T) {
+	m := newTestModel(t)
+	m.lessonIdx = len(m.lessons) - 1 // the final boss (Act III · The Grid Core)
+	m.inBoss = true
+	mm, _ := m.awardBoss()
+	m = mm.(Model)
+	if !m.resGameComplete {
+		t.Fatal("clearing the final boss should set resGameComplete")
+	}
+	m.scr = screenResults
+	if v := m.View(); !strings.Contains(v, "MASTERED") {
+		t.Errorf("finale should celebrate mastery; got:\n%s", v)
+	}
+}
+
+func TestHeartMessageExplainsLoss(t *testing.T) {
+	m := newTestModel(t)
+	m, _ = m.openLesson(0) // a1l1c1 allows only "i"
+	m = press(t, m, "z")   // disallowed → loses a heart
+	if m.heartMsg == "" {
+		t.Fatal("an invalid key should set a heart message")
+	}
+	if !strings.Contains(m.View(), "lost a heart") {
+		t.Errorf("room should explain why the heart was lost; got:\n%s", m.View())
+	}
+	m = press(t, m, "i") // a valid key clears it
+	if m.heartMsg != "" {
+		t.Errorf("a valid key should clear the heart message, got %q", m.heartMsg)
+	}
+}
+
 func TestPlayThroughFirstChallenge(t *testing.T) {
 	m := newTestModel(t)
 	m, _ = m.openLesson(0)

@@ -10,3 +10,15 @@ func normalizeKey(msg tea.KeyMsg) string {
 	}
 	return s
 }
+
+// keyLabel renders an engine key for display in player-facing messages.
+func keyLabel(key string) string {
+	switch key {
+	case " ":
+		return "space"
+	case "enter":
+		return "enter"
+	default:
+		return "'" + key + "'"
+	}
+}

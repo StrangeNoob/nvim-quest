@@ -52,13 +52,15 @@ type Model struct {
 	combo         int
 	showHint      bool
 	flash         bool
+	heartMsg      string // why the last heart was lost; cleared on the next valid key
 	actHeartsLost map[int]bool
 	// results
-	resStars   int
-	resXP      int
-	resBadges  []string
-	resFailed  bool
-	resWasBoss bool
+	resStars        int
+	resXP           int
+	resBadges       []string
+	resFailed       bool
+	resWasBoss      bool
+	resGameComplete bool // final boss cleared → show the finale celebration
 }
 
 // New builds the root model. version is the current build (shown on the title
