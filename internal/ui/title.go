@@ -6,16 +6,36 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+
+	"github.com/StrangeNoob/nvim-quest/internal/progress"
 )
 
-var menuItems = []string{"Continue", "World Map", "Stats", "Quit"}
+var menuItems = []string{"Continue", "World Map", "Stats", "Reset progress", "Quit"}
 
 func (m Model) updateTitle(msg tea.Msg) (tea.Model, tea.Cmd) {
 	keyMsg, ok := msg.(tea.KeyMsg)
 	if !ok {
 		return m, nil
 	}
-	switch normalizeKey(keyMsg) {
+	key := normalizeKey(keyMsg)
+
+	// While confirming a reset, only y/n (or esc) respond.
+	if m.confirmingReset {
+		switch key {
+		case "y":
+			m.prog = progress.New()
+			m.save()
+			m.combo = 1
+			m.actHeartsLost = map[int]bool{}
+			m.menuIdx = 0
+			m.confirmingReset = false
+		case "n", "esc":
+			m.confirmingReset = false
+		}
+		return m, nil
+	}
+
+	switch key {
 	case "j":
 		if m.menuIdx < len(menuItems)-1 {
 			m.menuIdx++
@@ -35,6 +55,8 @@ func (m Model) updateTitle(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.mapIdx = m.firstIncomplete()
 		case "Stats":
 			m.scr = screenStats
+		case "Reset progress":
+			m.confirmingReset = true
 		case "Quit":
 			return m, tea.Quit
 		}
@@ -64,6 +86,11 @@ func (m Model) viewTitle() string {
 			style = style.Bold(true).Foreground(pal.Primary)
 		}
 		b.WriteString(style.Render(line) + "\n")
+	}
+	if m.confirmingReset {
+		b.WriteString("\n" + dangerStyle.Render("Reset progress? All XP, stars, and badges will be lost.") + "\n")
+		b.WriteString(dimStyle.Render("[y] yes   [n] no"))
+		return b.String()
 	}
 	b.WriteString("\n" + dimStyle.Render(fmt.Sprintf("level %d · %d XP", m.prog.Level, m.prog.XP)))
 	if m.updateLatest != "" {
