@@ -21,7 +21,17 @@
       "goal": { "type": "bufferEquals", "lines": ["the chant repeats", "in the deep", "the chant repeats"] },
       "par": 4, "xp": 60,
       "hint": "Yank with yy, move down with j, paste with p.",
-      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "u", "x", "d", "y", "p"]
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "u", "x", "d", "y", "p", "P"]
+    },
+    {
+      "id": "a2l7c3",
+      "intro": "The echo can also rise. Copy the top line and let it sound above the bottom.",
+      "buffer": ["top", "bottom"], "cursor": [1, 0],
+      "goal": { "type": "bufferEquals", "lines": ["top", "top", "bottom"] },
+      "par": 5, "xp": 60,
+      "hint": "P pastes ABOVE the current line (p pastes below). Yank top, drop to bottom, then P.",
+      "newKeys": ["P"],
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "u", "x", "d", "y", "p", "P"]
     }
   ]
 }

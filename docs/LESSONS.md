@@ -119,15 +119,16 @@ Curriculum source: [Learn-Vim-and-NeoVim](https://github.com/rcallaby/Learn-Vim-
 
 These slot into the current acts and need only small, localized engine additions.
 
+**Shipped (batch 1 — the Editing pack, in Act II):** `o`/`O` (Opening Lines), `P` (Echo
+Chamber), `ciw`/`diw` (The Inner Cut), `u`/`Ctrl-r` (Rewind).
+
+Still to do:
+
 | Lesson idea | Teaches | Suggested act | Engine work |
 | --- | --- | --- | --- |
 | **The Word's Edge** | `e` (end of word) | I | small: an `e` motion (mirror of `w`) |
-| **Opening Lines** | `o` / `O` (open line below/above + insert) | II | small: split line, enter insert |
-| **Mirror Paste** | `P` (paste before) | II | small: paste above current line |
-| **The Inner Cut** | `ciw` / `diw` (change/delete inner word) | II | medium: text-object resolution (`iw`) |
 | **The Marksman** | `f` / `t` / `;` / `,` (find/till char on a line) | III | small: intra-line char search |
 | **The Great Substitution** | `:%s/old/new/g` (and ranges/flags) | III | medium: command-line mode + substitute parser |
-| **Rewind** | `u` (have it) + `Ctrl-r` (redo) | I or II | small: a redo stack alongside the undo stack |
 
 ### Phase "Everything" — likely a new Act IV (and beyond)
 

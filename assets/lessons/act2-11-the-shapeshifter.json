@@ -1,27 +1,27 @@
 {
-  "id": "act2-08-the-shapeshifter",
-  "act": 2, "order": 8,
+  "id": "act2-11-the-shapeshifter",
+  "act": 2, "order": 11,
   "title": "The Shapeshifter",
   "story": "A shapeshifter haunts these halls. Change a word in one motion (cw) or remake a whole line (cc).",
   "challenges": [
     {
-      "id": "a2l8c1",
+      "id": "a2l11c1",
       "intro": "The wolf is an illusion. Change it into the moon.",
       "buffer": ["the wolf howls"], "cursor": [0, 4],
       "goal": { "type": "bufferEquals", "lines": ["the moon howls"] },
       "par": 6, "xp": 60,
       "hint": "cw deletes the word and drops you straight into insert stance.",
       "newKeys": ["cw", "cc"],
-      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "u", "x", "d", "y", "p", "c"]
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "o", "O", "u", "ctrl+r", "x", "d", "y", "p", "P", "c"]
     },
     {
-      "id": "a2l8c2",
+      "id": "a2l11c2",
       "intro": "This line is beyond saving. Remake it as a single word: reborn",
       "buffer": ["scrap this entire line"], "cursor": [0, 0],
       "goal": { "type": "bufferEquals", "lines": ["reborn"] },
       "par": 8, "xp": 60,
       "hint": "cc clears the whole line and enters insert stance.",
-      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "u", "x", "d", "y", "p", "c"]
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "o", "O", "u", "ctrl+r", "x", "d", "y", "p", "P", "c"]
     }
   ],
   "boss": {

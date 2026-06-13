@@ -1,0 +1,27 @@
+{
+  "id": "act2-09-the-inner-cut",
+  "act": 2, "order": 9,
+  "title": "The Inner Cut",
+  "story": "Why aim at edges when you can strike the heart of a word? ciw changes the word under the cursor; diw deletes it — no matter where in the word you stand.",
+  "challenges": [
+    {
+      "id": "a2l9c1",
+      "intro": "One word is wrong. Stand anywhere on it and change it to 'right'.",
+      "buffer": ["the wrong word"], "cursor": [0, 4],
+      "goal": { "type": "bufferEquals", "lines": ["the right word"] },
+      "par": 8, "xp": 60,
+      "hint": "ciw deletes the whole word under the cursor and enters insert stance.",
+      "newKeys": ["ciw", "diw"],
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "o", "O", "u", "ctrl+r", "x", "d", "y", "p", "P", "c"]
+    },
+    {
+      "id": "a2l9c2",
+      "intro": "A cursed word festers in the line. Cut it out from within.",
+      "buffer": ["delete the cursed rune"], "cursor": [0, 11],
+      "goal": { "type": "wordDeleted", "word": "cursed" },
+      "par": 3, "xp": 60,
+      "hint": "diw deletes the inner word — your cursor can be anywhere inside it.",
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "o", "O", "u", "ctrl+r", "x", "d", "y", "p", "P", "c"]
+    }
+  ]
+}

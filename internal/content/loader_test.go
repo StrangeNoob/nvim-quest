@@ -49,8 +49,8 @@ func TestAllLoadsAndValidates(t *testing.T) {
 			}
 		}
 	}
-	if len(lessons) != 10 {
-		t.Errorf("expected 10 lessons, got %d", len(lessons))
+	if len(lessons) != 13 {
+		t.Errorf("expected 13 lessons, got %d", len(lessons))
 	}
 	bosses := 0
 	lastInAct := map[int]string{}

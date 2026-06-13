@@ -98,7 +98,7 @@ of time and you retry from the first step.
 | Act | World | Lessons | Vim covered |
 | --- | --- | --- | --- |
 | **I** | The Cursor Dojo | The Two Stances · First Steps · Way of the Word · The Great Leaps | modes & `i`/`Esc`, `h j k l`, `w`/`b`, `0` `$` `gg` `G` |
-| **II** | The Motion Crypts | Hall of Insertion · The Deletion Pits · Echo Chamber · The Shapeshifter | `i`/`a`, `x` `dw` `dd`, `yy`/`p`, `cw` `cc` |
+| **II** | The Motion Crypts | Hall of Insertion · The Deletion Pits · Echo Chamber · Opening Lines · The Inner Cut · Rewind · The Shapeshifter | `i`/`a`, `x` `dw` `dd`, `yy`/`p`/`P`, `o`/`O`, `ciw`/`diw`, `u`/`Ctrl-r`, `cw` `cc` |
 | **III** | The Neon Grid | Trace Evasion · Power Surge | `/` search & `n`, count prefixes (`4w`, `3dd`, `4x`) |
 
 Each act has a distinct color palette (dojo greens, crypt embers, neon magenta/cyan)
