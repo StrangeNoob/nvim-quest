@@ -36,7 +36,8 @@ type Model struct {
 	updateLatest string        // a newer release to advertise, once the check returns
 
 	// title
-	menuIdx int
+	menuIdx         int
+	confirmingReset bool // showing the "Reset progress?" confirmation on the title screen
 	// map
 	mapIdx int
 	// room / boss

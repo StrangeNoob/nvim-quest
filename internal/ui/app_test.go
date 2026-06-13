@@ -121,6 +121,53 @@ func TestTitleNavigation(t *testing.T) {
 	}
 }
 
+func TestInGameReset(t *testing.T) {
+	m := newTestModel(t)
+	m.scr = screenTitle
+	// Give the player some progress to wipe.
+	m.prog.MarkCompleted("a1l1c1")
+	m.prog.XP = 500
+	m.prog.Level = 3
+	m.prog.AddBadge("First Steps")
+	m.prog.Stars["a1l1c1"] = 3
+
+	// Select the "Reset progress" menu item.
+	resetIdx := -1
+	for i, it := range menuItems {
+		if it == "Reset progress" {
+			resetIdx = i
+		}
+	}
+	if resetIdx < 0 {
+		t.Fatal("no 'Reset progress' menu item")
+	}
+	m.menuIdx = resetIdx
+	m = press(t, m, "enter")
+	if !m.confirmingReset {
+		t.Fatal("selecting Reset progress should ask for confirmation")
+	}
+	if !strings.Contains(m.View(), "Reset progress?") {
+		t.Error("confirmation prompt should be shown")
+	}
+
+	// 'n' cancels — progress stays intact.
+	if cancelled := press(t, m, "n"); cancelled.confirmingReset || !cancelled.prog.IsCompleted("a1l1c1") {
+		t.Error("'n' must cancel and leave progress intact")
+	}
+
+	// 'y' confirms — progress wiped in memory and persisted.
+	m = press(t, m, "y")
+	if m.confirmingReset {
+		t.Error("'y' should close the confirmation")
+	}
+	if len(m.prog.Completed) != 0 || m.prog.XP != 0 || m.prog.Level != 1 || len(m.prog.Badges) != 0 {
+		t.Errorf("reset must clear progress, got %+v", m.prog)
+	}
+	if saved := progress.Load(m.savePath); len(saved.Completed) != 0 || saved.XP != 0 {
+		t.Errorf("reset must persist a fresh save, got %+v", saved)
+	}
+}
+
 func TestArrowKeysDoNotNavigate(t *testing.T) {
 	// This is a Vim trainer: only j/k move, never the arrow keys.
 	m := newTestModel(t)
