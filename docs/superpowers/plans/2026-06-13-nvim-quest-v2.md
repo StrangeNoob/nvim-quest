@@ -64,7 +64,7 @@ git rm -r -q cmd internal lessons main.go
 ```go
 package main
 
-import "nvim-quest/cmd"
+import "github.com/StrangeNoob/nvim-quest/cmd"
 
 func main() {
 	cmd.Execute()
@@ -1422,7 +1422,7 @@ Expected: FAIL (package doesn't exist)
 // Package content loads the embedded lesson JSON files.
 package content
 
-import "nvim-quest/internal/engine"
+import "github.com/StrangeNoob/nvim-quest/internal/engine"
 
 type Lesson struct {
 	ID         string      `json:"id"`
@@ -1469,7 +1469,7 @@ import (
 	"sort"
 	"strings"
 
-	"nvim-quest/assets"
+	"github.com/StrangeNoob/nvim-quest/assets"
 )
 
 // All returns every embedded lesson, sorted by (act, order).
@@ -2377,8 +2377,8 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 
-	"nvim-quest/internal/content"
-	"nvim-quest/internal/progress"
+	"github.com/StrangeNoob/nvim-quest/internal/content"
+	"github.com/StrangeNoob/nvim-quest/internal/progress"
 )
 
 func key(s string) tea.KeyMsg {
@@ -2613,9 +2613,9 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 
-	"nvim-quest/internal/content"
-	"nvim-quest/internal/engine"
-	"nvim-quest/internal/progress"
+	"github.com/StrangeNoob/nvim-quest/internal/content"
+	"github.com/StrangeNoob/nvim-quest/internal/engine"
+	"github.com/StrangeNoob/nvim-quest/internal/progress"
 )
 
 type screen int
@@ -2837,7 +2837,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 
-	"nvim-quest/internal/content"
+	"github.com/StrangeNoob/nvim-quest/internal/content"
 )
 
 func (m *Model) lessonComplete(l content.Lesson) bool {
@@ -2960,9 +2960,9 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 
-	"nvim-quest/internal/content"
-	"nvim-quest/internal/engine"
-	"nvim-quest/internal/game"
+	"github.com/StrangeNoob/nvim-quest/internal/content"
+	"github.com/StrangeNoob/nvim-quest/internal/engine"
+	"github.com/StrangeNoob/nvim-quest/internal/game"
 )
 
 type tickMsg struct{ gen int }
@@ -3388,9 +3388,9 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
 
-	"nvim-quest/internal/content"
-	"nvim-quest/internal/progress"
-	"nvim-quest/internal/ui"
+	"github.com/StrangeNoob/nvim-quest/internal/content"
+	"github.com/StrangeNoob/nvim-quest/internal/progress"
+	"github.com/StrangeNoob/nvim-quest/internal/ui"
 )
 
 var rootCmd = &cobra.Command{
@@ -3427,7 +3427,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"nvim-quest/internal/progress"
+	"github.com/StrangeNoob/nvim-quest/internal/progress"
 )
 
 var statsCmd = &cobra.Command{
@@ -3464,7 +3464,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"nvim-quest/internal/progress"
+	"github.com/StrangeNoob/nvim-quest/internal/progress"
 )
 
 var resetCmd = &cobra.Command{
