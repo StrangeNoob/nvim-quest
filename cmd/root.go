@@ -9,10 +9,10 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
 
-	"nvim-quest/internal/content"
-	"nvim-quest/internal/progress"
-	"nvim-quest/internal/ui"
-	"nvim-quest/internal/update"
+	"github.com/StrangeNoob/nvim-quest/internal/content"
+	"github.com/StrangeNoob/nvim-quest/internal/progress"
+	"github.com/StrangeNoob/nvim-quest/internal/ui"
+	"github.com/StrangeNoob/nvim-quest/internal/update"
 )
 
 // build info, injected from main via Execute.
@@ -95,7 +95,7 @@ func runUpdate() error {
 	defer cancel()
 	newV, err := update.Apply(ctx, buildVersion)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Could not update: %v.\nIf you installed via go install or a package manager, update with that instead; otherwise re-run with sufficient permissions (e.g. sudo).\n", err)
+		fmt.Fprintf(os.Stderr, "Could not update: %v.\nReinstall the latest release with:\n  go install github.com/StrangeNoob/nvim-quest@latest\n(Self-update needs the binary to be named 'nvim-quest' and writable; if you renamed it or lack permission, use the command above.)\n", err)
 		return err
 	}
 	if newV == "" {

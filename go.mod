@@ -1,4 +1,4 @@
-module nvim-quest
+module github.com/StrangeNoob/nvim-quest
 
 go 1.24.11
 

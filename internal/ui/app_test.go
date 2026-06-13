@@ -7,8 +7,8 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 
-	"nvim-quest/internal/content"
-	"nvim-quest/internal/progress"
+	"github.com/StrangeNoob/nvim-quest/internal/content"
+	"github.com/StrangeNoob/nvim-quest/internal/progress"
 )
 
 func key(s string) tea.KeyMsg {

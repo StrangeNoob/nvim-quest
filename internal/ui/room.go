@@ -8,9 +8,9 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 
-	"nvim-quest/internal/content"
-	"nvim-quest/internal/engine"
-	"nvim-quest/internal/game"
+	"github.com/StrangeNoob/nvim-quest/internal/content"
+	"github.com/StrangeNoob/nvim-quest/internal/engine"
+	"github.com/StrangeNoob/nvim-quest/internal/game"
 )
 
 type tickMsg struct{ gen int }

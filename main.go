@@ -1,6 +1,6 @@
 package main
 
-import "nvim-quest/cmd"
+import "github.com/StrangeNoob/nvim-quest/cmd"
 
 // Injected at build time via -ldflags (see .goreleaser.yaml). Defaults apply to
 // `go run` / `go build` dev builds.

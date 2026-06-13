@@ -7,7 +7,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 
-	"nvim-quest/internal/content"
+	"github.com/StrangeNoob/nvim-quest/internal/content"
 )
 
 func (m *Model) lessonComplete(l content.Lesson) bool {
