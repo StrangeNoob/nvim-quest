@@ -254,7 +254,11 @@ func (m Model) viewRoom() string {
 	b.WriteString(m.renderBuffer() + "\n\n")
 	b.WriteString(m.renderHUD(ch) + "\n")
 	if m.showHint {
-		b.WriteString(successStyle.Render("hint: "+ch.Hint) + "\n")
+		hint := ch.Hint
+		if hint == "" {
+			hint = "no hint for this one — trust your training."
+		}
+		b.WriteString(successStyle.Render("hint: "+hint) + "\n")
 	}
 	if m.flash {
 		b.WriteString(successStyle.Render("✦ CLEARED ✦") + "\n")

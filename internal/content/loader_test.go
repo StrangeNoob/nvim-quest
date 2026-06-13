@@ -81,6 +81,11 @@ func validateChallenge(t *testing.T, owner string, ch Challenge, needsParXP bool
 	if row < 0 || row >= len(ch.Buffer) || col < 0 || (len(ch.Buffer) > row && col > len(ch.Buffer[row])) {
 		t.Errorf("%s/%s: cursor %v out of bounds", owner, ch.ID, ch.Cursor)
 	}
+	// Every challenge and boss step needs a hint — the in-room [?] affordance
+	// renders ch.Hint, and an empty one shows a blank "hint:" line to the player.
+	if ch.Hint == "" {
+		t.Errorf("%s/%s: empty hint (the [?] key would show nothing)", owner, ch.ID)
+	}
 	valid := false
 	for _, gt := range goalTypes() {
 		if ch.Goal.Type == gt {

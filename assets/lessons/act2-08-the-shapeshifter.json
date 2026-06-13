@@ -34,25 +34,29 @@
         "id": "a2boss1",
         "intro": "Cut the doubled curse letter.",
         "buffer": ["the ccurse holds"], "cursor": [0, 4],
-        "goal": { "type": "bufferEquals", "lines": ["the curse holds"] }
+        "goal": { "type": "bufferEquals", "lines": ["the curse holds"] },
+        "hint": "x deletes the single character under the cursor."
       },
       {
         "id": "a2boss2",
         "intro": "Sweep the dust away — two words must go.",
         "buffer": ["bones and dust and shadow"], "cursor": [0, 10],
-        "goal": { "type": "bufferEquals", "lines": ["bones and shadow"] }
+        "goal": { "type": "bufferEquals", "lines": ["bones and shadow"] },
+        "hint": "dw deletes a word and its trailing space — do it twice."
       },
       {
         "id": "a2boss3",
         "intro": "The Gravewright rises... change his fate to 'falls'.",
         "buffer": ["the gravewright rises"], "cursor": [0, 16],
-        "goal": { "type": "bufferEquals", "lines": ["the gravewright falls"] }
+        "goal": { "type": "bufferEquals", "lines": ["the gravewright falls"] },
+        "hint": "cw changes the word under the cursor — type 'falls'."
       },
       {
         "id": "a2boss4",
         "intro": "Seal the tomb with a doubled binding.",
         "buffer": ["seal the tomb"], "cursor": [0, 0],
-        "goal": { "type": "bufferEquals", "lines": ["seal the tomb", "seal the tomb"] }
+        "goal": { "type": "bufferEquals", "lines": ["seal the tomb", "seal the tomb"] },
+        "hint": "yy yanks the line, p pastes a copy below it."
       }
     ]
   }

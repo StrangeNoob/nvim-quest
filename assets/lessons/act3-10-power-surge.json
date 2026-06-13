@@ -43,25 +43,29 @@
         "id": "a3boss1",
         "intro": "Bring down the firewall line.",
         "buffer": ["firewall firewall firewall", "the kernel sleeps"], "cursor": [0, 0],
-        "goal": { "type": "lineDeleted", "line": "firewall firewall firewall" }
+        "goal": { "type": "lineDeleted", "line": "firewall firewall firewall" },
+        "hint": "dd deletes the whole line the cursor is on."
       },
       {
         "id": "a3boss2",
         "intro": "Rewrite your fate: access granted.",
         "buffer": ["access denied"], "cursor": [0, 7],
-        "goal": { "type": "bufferEquals", "lines": ["access granted"] }
+        "goal": { "type": "bufferEquals", "lines": ["access granted"] },
+        "hint": "cw changes 'denied' into 'granted'."
       },
       {
         "id": "a3boss3",
         "intro": "Surge past four nodes to the breach.",
         "buffer": ["node node node node breach"], "cursor": [0, 0],
-        "goal": { "type": "cursorOnWord", "word": "breach" }
+        "goal": { "type": "cursorOnWord", "word": "breach" },
+        "hint": "A count multiplies a motion — 4w leaps four words at once."
       },
       {
         "id": "a3boss4",
         "intro": "Find where the core burns.",
         "buffer": ["the grid core burns", "deep in silicon"], "cursor": [0, 0],
-        "goal": { "type": "searchMatchActive", "term": "burns" }
+        "goal": { "type": "searchMatchActive", "term": "burns" },
+        "hint": "Search with /burns then press Enter to land on it."
       }
     ]
   }

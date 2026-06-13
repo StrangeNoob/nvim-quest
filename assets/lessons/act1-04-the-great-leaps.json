@@ -34,19 +34,22 @@
         "id": "a1boss1",
         "intro": "Seek the stone.",
         "buffer": ["seek the stone within the garden"], "cursor": [0, 0],
-        "goal": { "type": "cursorOnWord", "word": "stone" }
+        "goal": { "type": "cursorOnWord", "word": "stone" },
+        "hint": "w hops word to word — stone is the third word."
       },
       {
         "id": "a1boss2",
         "intro": "Descend to the deepest roots.",
         "buffer": ["high above clouds", "between two worlds", "deep below roots"], "cursor": [0, 0],
-        "goal": { "type": "cursorOnWord", "word": "roots" }
+        "goal": { "type": "cursorOnWord", "word": "roots" },
+        "hint": "G drops to the last line, then w to the final word."
       },
       {
         "id": "a1boss3",
         "intro": "Return to the beginning.",
         "buffer": ["return to the beginning now"], "cursor": [0, 25],
-        "goal": { "type": "cursorOnWord", "word": "return" }
+        "goal": { "type": "cursorOnWord", "word": "return" },
+        "hint": "0 jumps to the line's start; the first word is right there."
       }
     ]
   }

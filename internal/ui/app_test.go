@@ -2,6 +2,7 @@ package ui
 
 import (
 	"path/filepath"
+	"strings"
 	"testing"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -153,6 +154,39 @@ func TestPlayThroughFirstChallenge(t *testing.T) {
 	m = press(t, m, "enter")
 	if m.scr != screenRoom || m.chIdx != 1 {
 		t.Fatalf("want next room (chIdx 1), got screen=%v chIdx=%d", m.scr, m.chIdx)
+	}
+}
+
+func TestHintShowsInChallengeAndBoss(t *testing.T) {
+	q := tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune("?")}
+
+	// Regular challenge: ? reveals the challenge hint.
+	m := newTestModel(t)
+	m, _ = m.openLesson(0)
+	mm, _ := m.Update(q)
+	m = mm.(Model)
+	if !m.showHint {
+		t.Fatal("challenge: ? did not toggle the hint on")
+	}
+	if hint := m.cur().Hint; hint == "" || !strings.Contains(m.View(), hint) {
+		t.Errorf("challenge: view does not show the non-empty hint %q", hint)
+	}
+
+	// Boss step: ? must also reveal a real, non-empty hint (the reported bug).
+	b := newTestModel(t)
+	b.lessonIdx = 3 // act1-04 carries Sensei's Trial
+	b, _ = b.startBoss()
+	step := b.cur()
+	if step.Hint == "" {
+		t.Fatalf("boss step %s has an empty hint", step.ID)
+	}
+	mm, _ = b.Update(q)
+	b = mm.(Model)
+	if !b.showHint {
+		t.Fatal("boss: ? did not toggle the hint on")
+	}
+	if !strings.Contains(b.View(), step.Hint) {
+		t.Errorf("boss: view does not show the hint %q", step.Hint)
 	}
 }
 
