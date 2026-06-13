@@ -47,9 +47,11 @@ type Simulator struct {
 	opCount      int
 	pendingCount int
 	pendingG     bool
+	pendingInner bool // a text-object prefix (the "i" of diw/ciw) is armed
 
 	yank []string
 	undo []snapshot
+	redo []snapshot
 
 	SearchQuery string
 	lastSearch  string
@@ -155,10 +157,20 @@ func (s *Simulator) pressNormal(key string) Event {
 		}
 		s.Mode = ModeInsert
 		return Event{EvModeChanged}
+	case "o":
+		s.openLine(true)
+		return Event{EvModeChanged}
+	case "O":
+		s.openLine(false)
+		return Event{EvModeChanged}
 	case "u":
 		return s.applyUndo()
+	case "ctrl+r":
+		return s.applyRedo()
 	case "p":
 		return s.paste()
+	case "P":
+		return s.pasteBefore()
 	case "/":
 		s.Mode = ModeSearch
 		s.SearchQuery = ""
@@ -177,6 +189,7 @@ func (s *Simulator) clearPending() {
 	s.opCount = 0
 	s.pendingCount = 0
 	s.pendingG = false
+	s.pendingInner = false
 }
 
 func (s *Simulator) takeCount() int {
