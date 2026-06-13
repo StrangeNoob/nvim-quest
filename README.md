@@ -43,6 +43,18 @@ go install .
 nvim-quest
 ```
 
+Or grab a prebuilt binary for your OS/arch from the
+[Releases](https://github.com/StrangeNoob/nvim-quest/releases) page.
+
+```sh
+nvim-quest version   # version, commit, build date
+nvim-quest update    # self-update to the latest release
+```
+
+When a newer release exists, the title screen shows a `✨ vX available` notice (a
+throttled, background check; disable it with `--no-update-check` or the
+`NVIM_QUEST_NO_UPDATE_CHECK` env var).
+
 Your progress is saved to `~/.nvim-quest/progress.json`.
 
 > The game needs an interactive terminal at least **80×24**. It runs on the
