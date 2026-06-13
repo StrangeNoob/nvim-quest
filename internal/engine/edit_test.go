@@ -65,6 +65,8 @@ func TestDeleteAndChange(t *testing.T) {
 			[]string{"4", "x"}, []string{"core"}, Pos{0, 0}, ModeNormal},
 		{"dw deletes word and trailing space", []string{"the cursed goblin"}, Pos{0, 4},
 			[]string{"d", "w"}, []string{"the goblin"}, Pos{0, 4}, ModeNormal},
+		{"dw at end of line does not join next line", []string{"foo", "bar"}, Pos{0, 0},
+			[]string{"d", "w"}, []string{"", "bar"}, Pos{0, 0}, ModeNormal},
 		{"2dw deletes two words", []string{"bones and dust and shadow"}, Pos{0, 10},
 			[]string{"2", "d", "w"}, []string{"bones and shadow"}, Pos{0, 10}, ModeNormal},
 		{"dd deletes line", []string{"keep", "kill", "keep2"}, Pos{1, 0},
