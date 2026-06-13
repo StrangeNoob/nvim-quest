@@ -1,0 +1,59 @@
+{
+  "id": "act2-08-the-shapeshifter",
+  "act": 2, "order": 8,
+  "title": "The Shapeshifter",
+  "story": "A shapeshifter haunts these halls. Change a word in one motion (cw) or remake a whole line (cc).",
+  "challenges": [
+    {
+      "id": "a2l8c1",
+      "intro": "The wolf is an illusion. Change it into the moon.",
+      "buffer": ["the wolf howls"], "cursor": [0, 4],
+      "goal": { "type": "bufferEquals", "lines": ["the moon howls"] },
+      "par": 6, "xp": 60,
+      "hint": "cw deletes the word and drops you straight into insert stance.",
+      "newKeys": ["cw", "cc"],
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "u", "x", "d", "y", "p", "c"]
+    },
+    {
+      "id": "a2l8c2",
+      "intro": "This line is beyond saving. Remake it as a single word: reborn",
+      "buffer": ["scrap this entire line"], "cursor": [0, 0],
+      "goal": { "type": "bufferEquals", "lines": ["reborn"] },
+      "par": 8, "xp": 60,
+      "hint": "cc clears the whole line and enters insert stance.",
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "u", "x", "d", "y", "p", "c"]
+    }
+  ],
+  "boss": {
+    "name": "The Gravewright",
+    "taunt": "Your edits cannot save you, little scribe. The tomb closes.",
+    "timeLimitSec": 90,
+    "xp": 250,
+    "steps": [
+      {
+        "id": "a2boss1",
+        "intro": "Cut the doubled curse letter.",
+        "buffer": ["the ccurse holds"], "cursor": [0, 4],
+        "goal": { "type": "bufferEquals", "lines": ["the curse holds"] }
+      },
+      {
+        "id": "a2boss2",
+        "intro": "Sweep the dust away — two words must go.",
+        "buffer": ["bones and dust and shadow"], "cursor": [0, 10],
+        "goal": { "type": "bufferEquals", "lines": ["bones and shadow"] }
+      },
+      {
+        "id": "a2boss3",
+        "intro": "The Gravewright rises... change his fate to 'falls'.",
+        "buffer": ["the gravewright rises"], "cursor": [0, 16],
+        "goal": { "type": "bufferEquals", "lines": ["the gravewright falls"] }
+      },
+      {
+        "id": "a2boss4",
+        "intro": "Seal the tomb with a doubled binding.",
+        "buffer": ["seal the tomb"], "cursor": [0, 0],
+        "goal": { "type": "bufferEquals", "lines": ["seal the tomb", "seal the tomb"] }
+      }
+    ]
+  }
+}

@@ -49,6 +49,27 @@ func TestAllLoadsAndValidates(t *testing.T) {
 			}
 		}
 	}
+	if len(lessons) != 10 {
+		t.Errorf("expected 10 lessons, got %d", len(lessons))
+	}
+	bosses := 0
+	lastInAct := map[int]string{}
+	for _, l := range lessons {
+		lastInAct[l.Act] = l.ID
+		if l.Boss != nil {
+			bosses++
+		}
+	}
+	if bosses != 3 {
+		t.Errorf("expected 3 bosses, got %d", bosses)
+	}
+	for act, id := range lastInAct {
+		for _, l := range lessons {
+			if l.ID == id && l.Boss == nil {
+				t.Errorf("act %d final lesson %s must carry the boss", act, id)
+			}
+		}
+	}
 }
 
 func validateChallenge(t *testing.T, owner string, ch Challenge, needsParXP bool) {

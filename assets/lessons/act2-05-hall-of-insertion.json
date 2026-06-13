@@ -1,0 +1,27 @@
+{
+  "id": "act2-05-hall-of-insertion",
+  "act": 2, "order": 5,
+  "title": "Hall of Insertion",
+  "story": "Torchlight flickers. Carvings on the crypt wall are unfinished — and the door will not open until the words are whole.",
+  "challenges": [
+    {
+      "id": "a2l5c1",
+      "intro": "Finish the carving: the crypt door is... open. Append the final word.",
+      "buffer": ["the crypt door is "], "cursor": [0, 17],
+      "goal": { "type": "containsText", "text": "the crypt door is open" },
+      "par": 5, "xp": 60,
+      "hint": "a appends after the cursor — perfect for the end of a line.",
+      "newKeys": ["a"],
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "u"]
+    },
+    {
+      "id": "a2l5c2",
+      "intro": "An old word crumbled from the middle. Restore 'old' before the torch.",
+      "buffer": ["light the  torch"], "cursor": [0, 10],
+      "goal": { "type": "bufferEquals", "lines": ["light the old torch"] },
+      "par": 4, "xp": 60,
+      "hint": "i inserts before the cursor.",
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "u"]
+    }
+  ]
+}

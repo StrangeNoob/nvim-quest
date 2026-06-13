@@ -1,0 +1,27 @@
+{
+  "id": "act2-07-echo-chamber",
+  "act": 2, "order": 7,
+  "title": "Echo Chamber",
+  "story": "This chamber repeats every sound. Yank a line into memory (yy) and let it echo back (p).",
+  "challenges": [
+    {
+      "id": "a2l7c1",
+      "intro": "Make the chamber echo. Duplicate the word below itself.",
+      "buffer": ["echo"], "cursor": [0, 0],
+      "goal": { "type": "bufferEquals", "lines": ["echo", "echo"] },
+      "par": 3, "xp": 60,
+      "hint": "yy copies the line, p pastes it below.",
+      "newKeys": ["yy", "p"],
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "u", "x", "d", "y", "p"]
+    },
+    {
+      "id": "a2l7c2",
+      "intro": "Carry the chant down past the deep and let it echo at the bottom.",
+      "buffer": ["the chant repeats", "in the deep"], "cursor": [0, 0],
+      "goal": { "type": "bufferEquals", "lines": ["the chant repeats", "in the deep", "the chant repeats"] },
+      "par": 4, "xp": 60,
+      "hint": "Yank with yy, move down with j, paste with p.",
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "u", "x", "d", "y", "p"]
+    }
+  ]
+}

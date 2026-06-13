@@ -1,0 +1,27 @@
+{
+  "id": "act3-09-trace-evasion",
+  "act": 3, "order": 9,
+  "title": "Trace Evasion",
+  "story": "You are inside the Grid. Eyes everywhere. Search (/) finds anything instantly — n hops to the next hit before the trace locks on.",
+  "challenges": [
+    {
+      "id": "a3l9c1",
+      "intro": "Locate the backdoor before the trace completes.",
+      "buffer": ["the grid hums with data", "a backdoor hides in the stream"], "cursor": [0, 0],
+      "goal": { "type": "searchMatchActive", "term": "backdoor" },
+      "par": 10, "xp": 70,
+      "hint": "Type /backdoor then Enter.",
+      "newKeys": ["/", "n"],
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "u", "x", "d", "y", "p", "c", "/", "n"]
+    },
+    {
+      "id": "a3l9c2",
+      "intro": "Three nodes share a signature. Hop matches until you reach node3.",
+      "buffer": ["trace node1 active", "trace node2 active", "trace node3 active"], "cursor": [0, 0],
+      "goal": { "type": "cursorOnWord", "word": "node3" },
+      "par": 8, "xp": 70,
+      "hint": "Search /node then press n to jump to the next match.",
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "u", "x", "d", "y", "p", "c", "/", "n"]
+    }
+  ]
+}
