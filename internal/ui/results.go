@@ -55,7 +55,13 @@ func (m Model) viewResults() string {
 	}
 	b.WriteString(lipgloss.NewStyle().Foreground(pal.Primary).Bold(true).Render(title) + "\n\n")
 	if m.resFailed {
-		b.WriteString(l.Boss.Name + " survives... this time.\n\n")
+		// resFailed is only set on a boss timer expiry, so l.Boss is non-nil
+		// here today; guard anyway so the view can never panic.
+		who := "The boss"
+		if l.Boss != nil {
+			who = l.Boss.Name
+		}
+		b.WriteString(who + " survives... this time.\n\n")
 		b.WriteString(dimStyle.Render("[enter] try again · [esc] world map"))
 		return b.String()
 	}

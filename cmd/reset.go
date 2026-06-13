@@ -15,8 +15,9 @@ var resetCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fmt.Print("This erases ALL progress. Type 'yes' to confirm: ")
 		var answer string
-		fmt.Scanln(&answer)
-		if answer != "yes" {
+		// Any read failure (empty line, EOF) leaves answer empty and aborts —
+		// fail safe: never delete progress unless the user explicitly typed yes.
+		if _, err := fmt.Scanln(&answer); err != nil || answer != "yes" {
 			fmt.Println("aborted")
 			return nil
 		}

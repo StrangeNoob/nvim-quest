@@ -43,6 +43,23 @@ func TestSearch(t *testing.T) {
 	}
 }
 
+// TestSearchWrapsToEarlierMatchOnStartRow locks in the intentional rows+1
+// iteration in jumpToMatch: a forward search must wrap around and find a match
+// that lies BEFORE the cursor on the cursor's own line. A naive `i < rows` loop
+// would miss it, so this test guards against that regression.
+func TestSearchWrapsToEarlierMatchOnStartRow(t *testing.T) {
+	// Single line, two matches; cursor sits after the only-line's matches.
+	s := New([]string{"foo bar foo"}, Pos{0, 8}) // on the second "foo"
+	for _, k := range []string{"/", "f", "o", "o", "enter"} {
+		s.Press(k)
+	}
+	// enter searches forward from col 9; the only remaining match is at col 0
+	// after wrapping around the single line.
+	if s.Cursor != (Pos{0, 0}) {
+		t.Errorf("cursor = %v, want {0 0} (search must wrap to the earlier match)", s.Cursor)
+	}
+}
+
 func TestSearchQueryVisible(t *testing.T) {
 	s := New([]string{"abc"}, Pos{0, 0})
 	s.Press("/")
