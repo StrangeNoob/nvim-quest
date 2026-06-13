@@ -5,33 +5,28 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
+
+	"nvim-quest/internal/progress"
 )
 
 var statsCmd = &cobra.Command{
 	Use:   "stats",
-	Short: "Show saved quest progress",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		_, saved, err := progressData()
-		if err != nil {
-			return printError(err)
+	Short: "Show your journey stats",
+	Run: func(cmd *cobra.Command, args []string) {
+		p := progress.Load(progress.DefaultPath())
+		stars := 0
+		for _, s := range p.Stars {
+			stars += s
 		}
-		badges := "None yet"
-		if len(saved.Badges) > 0 {
-			badges = strings.Join(saved.Badges, ", ")
+		fmt.Printf("level %d · %d XP\n", p.Level, p.XP)
+		fmt.Printf("rooms cleared: %d · stars: %d\n", len(p.Completed), stars)
+		if len(p.Badges) > 0 {
+			fmt.Println("badges: " + strings.Join(p.Badges, ", "))
 		}
-		fmt.Fprintf(cmd.OutOrStdout(), "XP: %d\nStreak: %d\nCompleted challenges: %d\nBadges: %s\nLast lesson: %s\n",
-			saved.XP, saved.Streak, len(saved.CompletedChallenges), badges, valueOrNone(saved.LastLessonID))
-		return nil
+		if p.LastLesson != "" {
+			fmt.Println("last lesson: " + p.LastLesson)
+		}
 	},
 }
 
-func valueOrNone(value string) string {
-	if value == "" {
-		return "None yet"
-	}
-	return value
-}
-
-func init() {
-	rootCmd.AddCommand(statsCmd)
-}
+func init() { rootCmd.AddCommand(statsCmd) }

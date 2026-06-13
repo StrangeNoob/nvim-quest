@@ -1,0 +1,53 @@
+{
+  "id": "act1-04-the-great-leaps",
+  "act": 1, "order": 4,
+  "title": "The Great Leaps",
+  "story": "Sensei: \"Why walk when you can fly? 0 to the line's dawn, $ to its dusk. gg to the summit, G to the roots.\"",
+  "challenges": [
+    {
+      "id": "a1l4c1",
+      "intro": "Dive to the river's mouth at the very bottom.",
+      "buffer": ["mountain peak above", "mist in the middle", "river mouth below"], "cursor": [0, 0],
+      "goal": { "type": "cursorOnWord", "word": "mouth" },
+      "par": 2, "xp": 50,
+      "hint": "G drops to the last line; w hops to the next word.",
+      "newKeys": ["0", "$", "gg", "G"],
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G"]
+    },
+    {
+      "id": "a1l4c2",
+      "intro": "Soar back to the peak, to the word at the line's end.",
+      "buffer": ["mountain peak above", "mist in the middle", "river mouth below"], "cursor": [2, 8],
+      "goal": { "type": "cursorOnWord", "word": "above" },
+      "par": 3, "xp": 50,
+      "hint": "gg flies to the first line, $ to the line's end.",
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G"]
+    }
+  ],
+  "boss": {
+    "name": "Sensei's Trial",
+    "taunt": "Show me the way of motion, student. The hourglass empties.",
+    "timeLimitSec": 60,
+    "xp": 200,
+    "steps": [
+      {
+        "id": "a1boss1",
+        "intro": "Seek the stone.",
+        "buffer": ["seek the stone within the garden"], "cursor": [0, 0],
+        "goal": { "type": "cursorOnWord", "word": "stone" }
+      },
+      {
+        "id": "a1boss2",
+        "intro": "Descend to the deepest roots.",
+        "buffer": ["high above clouds", "between two worlds", "deep below roots"], "cursor": [0, 0],
+        "goal": { "type": "cursorOnWord", "word": "roots" }
+      },
+      {
+        "id": "a1boss3",
+        "intro": "Return to the beginning.",
+        "buffer": ["return to the beginning now"], "cursor": [0, 25],
+        "goal": { "type": "cursorOnWord", "word": "return" }
+      }
+    ]
+  }
+}

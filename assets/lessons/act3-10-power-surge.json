@@ -1,0 +1,68 @@
+{
+  "id": "act3-10-power-surge",
+  "act": 3, "order": 10,
+  "title": "Power Surge",
+  "story": "Why press a key four times when a number presses it for you? Counts multiply any motion or edit: 4w, 3dd, 4x.",
+  "challenges": [
+    {
+      "id": "a3l10c1",
+      "intro": "Surge four words forward in a single command.",
+      "buffer": ["one two three four five six"], "cursor": [0, 0],
+      "goal": { "type": "cursorOnWord", "word": "five" },
+      "par": 2, "xp": 70,
+      "hint": "4w = w four times.",
+      "newKeys": ["counts"],
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "u", "x", "d", "y", "p", "c", "/", "n", "2", "3", "4"]
+    },
+    {
+      "id": "a3l10c2",
+      "intro": "Three decoy lines guard the core. Drop them all at once.",
+      "buffer": ["zap", "zap", "zap", "the core stands"], "cursor": [0, 0],
+      "goal": { "type": "bufferEquals", "lines": ["the core stands"] },
+      "par": 3, "xp": 70,
+      "hint": "3dd deletes three lines.",
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "u", "x", "d", "y", "p", "c", "/", "n", "2", "3", "4"]
+    },
+    {
+      "id": "a3l10c3",
+      "intro": "Four corrupt bytes mask the core. Purge them in one strike.",
+      "buffer": ["xxxxcore"], "cursor": [0, 0],
+      "goal": { "type": "bufferEquals", "lines": ["core"] },
+      "par": 2, "xp": 70,
+      "hint": "4x deletes four characters.",
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "u", "x", "d", "y", "p", "c", "/", "n", "2", "3", "4"]
+    }
+  ],
+  "boss": {
+    "name": "The Grid Core",
+    "taunt": "I am the Grid. You are a syntax error.",
+    "timeLimitSec": 120,
+    "xp": 300,
+    "steps": [
+      {
+        "id": "a3boss1",
+        "intro": "Bring down the firewall line.",
+        "buffer": ["firewall firewall firewall", "the kernel sleeps"], "cursor": [0, 0],
+        "goal": { "type": "lineDeleted", "line": "firewall firewall firewall" }
+      },
+      {
+        "id": "a3boss2",
+        "intro": "Rewrite your fate: access granted.",
+        "buffer": ["access denied"], "cursor": [0, 7],
+        "goal": { "type": "bufferEquals", "lines": ["access granted"] }
+      },
+      {
+        "id": "a3boss3",
+        "intro": "Surge past four nodes to the breach.",
+        "buffer": ["node node node node breach"], "cursor": [0, 0],
+        "goal": { "type": "cursorOnWord", "word": "breach" }
+      },
+      {
+        "id": "a3boss4",
+        "intro": "Find where the core burns.",
+        "buffer": ["the grid core burns", "deep in silicon"], "cursor": [0, 0],
+        "goal": { "type": "searchMatchActive", "term": "burns" }
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "id": "act2-06-the-deletion-pits",
+  "act": 2, "order": 6,
+  "title": "The Deletion Pits",
+  "story": "Cursed glyphs crawl across the walls. Your blade can cut a letter (x), a word (dw), or an entire line (dd).",
+  "challenges": [
+    {
+      "id": "a2l6c1",
+      "intro": "A stray letter corrupts the war cry. Cut it.",
+      "buffer": ["sslay the beast"], "cursor": [0, 0],
+      "goal": { "type": "bufferEquals", "lines": ["slay the beast"] },
+      "par": 1, "xp": 60,
+      "hint": "x deletes the character under the cursor.",
+      "newKeys": ["x", "dw", "dd"],
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "u", "x", "d"]
+    },
+    {
+      "id": "a2l6c2",
+      "intro": "Lift the curse from the goblin. Delete the cursed word.",
+      "buffer": ["the cursed goblin lurks"], "cursor": [0, 4],
+      "goal": { "type": "bufferEquals", "lines": ["the goblin lurks"] },
+      "par": 2, "xp": 60,
+      "hint": "dw deletes from the cursor through the end of the word.",
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "u", "x", "d"]
+    },
+    {
+      "id": "a2l6c3",
+      "intro": "One inscription must burn. Erase the entire middle line.",
+      "buffer": ["keep this relic", "burn this line", "keep this too"], "cursor": [1, 0],
+      "goal": { "type": "lineDeleted", "line": "burn this line" },
+      "par": 2, "xp": 60,
+      "hint": "dd deletes the whole current line.",
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "u", "x", "d"]
+    }
+  ]
+}

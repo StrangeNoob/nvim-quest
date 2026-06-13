@@ -1,43 +1,32 @@
 package cmd
 
 import (
-	"bufio"
 	"fmt"
-	"strings"
+	"os"
 
 	"github.com/spf13/cobra"
-)
 
-var resetYes bool
+	"nvim-quest/internal/progress"
+)
 
 var resetCmd = &cobra.Command{
 	Use:   "reset",
-	Short: "Reset all local progress",
+	Short: "Erase all progress and start the journey anew",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if !resetYes {
-			fmt.Fprint(cmd.OutOrStdout(), "Reset all nvim-quest progress? [y/N] ")
-			answer, err := bufio.NewReader(cmd.InOrStdin()).ReadString('\n')
-			if err != nil {
-				return printError(err)
-			}
-			if strings.ToLower(strings.TrimSpace(answer)) != "y" {
-				fmt.Fprintln(cmd.OutOrStdout(), "Reset cancelled.")
-				return nil
-			}
+		fmt.Print("This erases ALL progress. Type 'yes' to confirm: ")
+		var answer string
+		// Any read failure (empty line, EOF) leaves answer empty and aborts —
+		// fail safe: never delete progress unless the user explicitly typed yes.
+		if _, err := fmt.Scanln(&answer); err != nil || answer != "yes" {
+			fmt.Println("aborted")
+			return nil
 		}
-		store, _, err := progressData()
-		if err != nil {
-			return printError(err)
+		if err := os.Remove(progress.DefaultPath()); err != nil && !os.IsNotExist(err) {
+			return err
 		}
-		if err := store.Reset(); err != nil {
-			return printError(err)
-		}
-		fmt.Fprintln(cmd.OutOrStdout(), "Progress reset.")
+		fmt.Println("progress erased — the journey begins again")
 		return nil
 	},
 }
 
-func init() {
-	resetCmd.Flags().BoolVarP(&resetYes, "yes", "y", false, "reset without confirmation")
-	rootCmd.AddCommand(resetCmd)
-}
+func init() { rootCmd.AddCommand(resetCmd) }

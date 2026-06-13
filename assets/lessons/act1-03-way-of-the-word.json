@@ -1,0 +1,27 @@
+{
+  "id": "act1-03-way-of-the-word",
+  "act": 1, "order": 3,
+  "title": "Way of the Word",
+  "story": "Sensei: \"The wise cursor moves by words, not steps. w leaps forward, b leaps back.\"",
+  "challenges": [
+    {
+      "id": "a1l3c1",
+      "intro": "Reach the temple in as few strides as you can.",
+      "buffer": ["the path to the temple is long"], "cursor": [0, 0],
+      "goal": { "type": "cursorOnWord", "word": "temple" },
+      "par": 4, "xp": 50,
+      "hint": "w jumps to the start of the next word.",
+      "newKeys": ["w", "b"],
+      "allowedKeys": ["h", "j", "k", "l", "w", "b"]
+    },
+    {
+      "id": "a1l3c2",
+      "intro": "Wisdom lies behind you. Leap back to it.",
+      "buffer": ["wisdom flows backward"], "cursor": [0, 20],
+      "goal": { "type": "cursorOnWord", "word": "wisdom" },
+      "par": 3, "xp": 50,
+      "hint": "b jumps to the start of the previous word.",
+      "allowedKeys": ["h", "j", "k", "l", "w", "b"]
+    }
+  ]
+}

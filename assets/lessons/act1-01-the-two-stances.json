@@ -1,0 +1,27 @@
+{
+  "id": "act1-01-the-two-stances",
+  "act": 1, "order": 1,
+  "title": "The Two Stances",
+  "story": "Sensei: \"The blade cursor knows two stances. Normal, where you command. Insert, where you write. Master the switch between them.\"",
+  "challenges": [
+    {
+      "id": "a1l1c1",
+      "intro": "Declare yourself ready. Enter the insert stance and add 'I ' at the front.",
+      "buffer": ["am ready"], "cursor": [0, 0],
+      "goal": { "type": "containsText", "text": "I am ready" },
+      "par": 3, "xp": 50,
+      "hint": "Press i to enter insert stance, type the text, then Esc to return.",
+      "newKeys": ["i", "esc"],
+      "allowedKeys": ["i"]
+    },
+    {
+      "id": "a1l1c2",
+      "intro": "A word is missing between the breaths. Insert 'in' at the cursor.",
+      "buffer": ["breathe  out"], "cursor": [0, 8],
+      "goal": { "type": "bufferEquals", "lines": ["breathe in out"] },
+      "par": 3, "xp": 50,
+      "hint": "i inserts before the cursor.",
+      "allowedKeys": ["i"]
+    }
+  ]
+}

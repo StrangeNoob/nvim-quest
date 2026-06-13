@@ -1,0 +1,27 @@
+{
+  "id": "act1-02-first-steps",
+  "act": 1, "order": 2,
+  "title": "First Steps",
+  "story": "Sensei: \"Every journey begins with a single step. h left, j down, k up, l right. Walk.\"",
+  "challenges": [
+    {
+      "id": "a1l2c1",
+      "intro": "Walk to the master.",
+      "buffer": ["walk the path", "to the master"], "cursor": [0, 0],
+      "goal": { "type": "cursorOnWord", "word": "master" },
+      "par": 8, "xp": 50,
+      "hint": "j moves down a line, l moves right one step.",
+      "newKeys": ["h", "j", "k", "l"],
+      "allowedKeys": ["h", "j", "k", "l"]
+    },
+    {
+      "id": "a1l2c2",
+      "intro": "Climb back up to the summit.",
+      "buffer": ["the summit waits", "climb back up", "from the valley"], "cursor": [2, 0],
+      "goal": { "type": "cursorOnWord", "word": "summit" },
+      "par": 6, "xp": 50,
+      "hint": "k climbs up, l steps right.",
+      "allowedKeys": ["h", "j", "k", "l"]
+    }
+  ]
+}
