@@ -134,6 +134,6 @@ schema and a worked example live in [docs/LESSONS.md](docs/LESSONS.md).
 
 ## License
 
-No license file is included yet; treat this as provided as-is for learning until one is
-added. The curriculum it's based on,
-[Learn-Vim-and-NeoVim](https://github.com/rcallaby/Learn-Vim-and-NeoVim), is MIT-licensed.
+Released under the [MIT License](LICENSE). The curriculum it's based on,
+[Learn-Vim-and-NeoVim](https://github.com/rcallaby/Learn-Vim-and-NeoVim), is also
+MIT-licensed.
