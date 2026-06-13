@@ -61,6 +61,8 @@ func TestInnerWord(t *testing.T) {
 			[]string{"d", "i", "w"}, []string{"foo  baz"}, Pos{0, 4}, ModeNormal},
 		{"ciw changes the inner word", []string{"the wrong word"}, Pos{0, 4},
 			[]string{"c", "i", "w", "r", "i", "g", "h", "t"}, []string{"the right word"}, Pos{0, 9}, ModeInsert},
+		{"ciw on the last word of a line inserts at the right offset", []string{"foo bar"}, Pos{0, 5},
+			[]string{"c", "i", "w", "b", "a", "z"}, []string{"foo baz"}, Pos{0, 7}, ModeInsert},
 		{"diw on a space is a no-op", []string{"a b"}, Pos{0, 1},
 			[]string{"d", "i", "w"}, []string{"a b"}, Pos{0, 1}, ModeNormal},
 		{"d then invalid object cancels", []string{"abc def"}, Pos{0, 0},

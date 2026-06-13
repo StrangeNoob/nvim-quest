@@ -52,9 +52,12 @@ func (s *Simulator) applyOperator(key string) Event {
 			s.snapshot()
 			s.deleteInnerWord()
 			if op == "c" {
+				// ciw: stay at the word's start (may be end-of-line, a valid
+				// insert position) and enter insert; do NOT normal-mode clamp.
 				s.Mode = ModeInsert
 				return Event{EvModeChanged}
 			}
+			s.clampCol() // diw: settle the cursor on a valid normal-mode column
 			return Event{EvEdited}
 		}
 		return Event{EvInvalid}
@@ -238,6 +241,5 @@ func (s *Simulator) deleteInnerWord() {
 		end++
 	}
 	s.setLine(line[:start] + line[end:])
-	s.Cursor.Col = start
-	s.clampCol()
+	s.Cursor.Col = start // caller clamps for diw; ciw keeps this as the insert point
 }

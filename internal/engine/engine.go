@@ -63,7 +63,7 @@ func New(lines []string, cursor Pos) *Simulator {
 	return &Simulator{Buffer: buf, Cursor: cursor}
 }
 
-// Pending returns the visible pending state ("d", "3", "3d", "g") for the HUD.
+// Pending returns the visible pending state ("d", "3", "3d", "di", "g") for the HUD.
 func (s *Simulator) Pending() string {
 	out := ""
 	if s.pendingOp != "" {
@@ -71,6 +71,9 @@ func (s *Simulator) Pending() string {
 			out += strconv.Itoa(s.opCount)
 		}
 		out += s.pendingOp
+		if s.pendingInner {
+			out += "i" // the inner text-object prefix (di/ci) is armed
+		}
 	} else if s.pendingCount > 0 {
 		out += strconv.Itoa(s.pendingCount)
 	}
