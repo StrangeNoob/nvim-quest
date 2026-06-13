@@ -159,9 +159,23 @@ func TestMapLockAndEnter(t *testing.T) {
 	}
 }
 
+// bossLessonIdx finds the index of the lesson carrying the given act's boss,
+// so tests don't depend on absolute lesson positions.
+func bossLessonIdx(m Model, act int) int {
+	for i, l := range m.lessons {
+		if l.Act == act && l.Boss != nil {
+			return i
+		}
+	}
+	return -1
+}
+
 func TestNextActAnnouncementOnBossClear(t *testing.T) {
 	m := newTestModel(t)
-	m.lessonIdx = 3 // act1-04 carries Sensei's Trial
+	m.lessonIdx = bossLessonIdx(m, 1) // the Act I boss (Sensei's Trial)
+	if m.lessonIdx < 0 {
+		t.Fatal("no Act I boss lesson found")
+	}
 	m.inBoss = true
 	mm, _ := m.awardBoss()
 	m = mm.(Model)
@@ -200,7 +214,14 @@ func TestHeartMessageExplainsLoss(t *testing.T) {
 	if !strings.Contains(m.View(), "lost a heart") {
 		t.Errorf("room should explain why the heart was lost; got:\n%s", m.View())
 	}
-	m = press(t, m, "i") // a valid key clears it
+	// Toggling the hint must also clear the notice (regression: early-return path).
+	m = press(t, m, "?")
+	if m.heartMsg != "" {
+		t.Errorf("pressing ? should clear the heart message, got %q", m.heartMsg)
+	}
+	// And a normal valid key clears it too.
+	m = press(t, m, "z") // lose another heart to re-set the message
+	m = press(t, m, "i") // valid key
 	if m.heartMsg != "" {
 		t.Errorf("a valid key should clear the heart message, got %q", m.heartMsg)
 	}

@@ -123,6 +123,8 @@ func (m Model) updateRoom(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, nil
 		}
 		key := normalizeKey(msg)
+		// Clear the heart-loss notice on any keystroke; an invalid key resets it below.
+		m.heartMsg = ""
 		if key == "esc" && m.sim.Mode == engine.ModeNormal {
 			m.scr = screenMap
 			m.mapIdx = m.lessonIdx
@@ -149,8 +151,6 @@ func (m Model) updateRoom(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			return m, nil
 		}
-		// A valid keystroke clears the "why you lost a heart" notice.
-		m.heartMsg = ""
 		if m.cur().Goal.Met(m.sim) {
 			return m.handleClear()
 		}
