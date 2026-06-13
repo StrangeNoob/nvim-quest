@@ -44,11 +44,11 @@ func (m Model) updateMap(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, nil
 	}
 	switch normalizeKey(keyMsg) {
-	case "j", "down":
+	case "j":
 		if m.mapIdx < len(m.lessons)-1 {
 			m.mapIdx++
 		}
-	case "k", "up":
+	case "k":
 		if m.mapIdx > 0 {
 			m.mapIdx--
 		}

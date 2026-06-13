@@ -62,6 +62,24 @@ func TestTitleNavigation(t *testing.T) {
 	}
 }
 
+func TestArrowKeysDoNotNavigate(t *testing.T) {
+	// This is a Vim trainer: only j/k move, never the arrow keys.
+	m := newTestModel(t)
+	mm, _ := m.Update(tea.KeyMsg{Type: tea.KeyDown})
+	m = mm.(Model)
+	if m.menuIdx != 0 {
+		t.Errorf("title menuIdx = %d after Down arrow, want 0 (arrows must not move)", m.menuIdx)
+	}
+
+	m.scr = screenMap
+	m.mapIdx = 0
+	mm, _ = m.Update(tea.KeyMsg{Type: tea.KeyDown})
+	m = mm.(Model)
+	if m.mapIdx != 0 {
+		t.Errorf("map mapIdx = %d after Down arrow, want 0 (arrows must not move)", m.mapIdx)
+	}
+}
+
 func TestMapLockAndEnter(t *testing.T) {
 	m := newTestModel(t)
 	m.scr = screenMap

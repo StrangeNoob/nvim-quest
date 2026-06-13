@@ -16,11 +16,11 @@ func (m Model) updateTitle(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, nil
 	}
 	switch normalizeKey(keyMsg) {
-	case "j", "down":
+	case "j":
 		if m.menuIdx < len(menuItems)-1 {
 			m.menuIdx++
 		}
-	case "k", "up":
+	case "k":
 		if m.menuIdx > 0 {
 			m.menuIdx--
 		}
