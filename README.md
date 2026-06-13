@@ -25,9 +25,31 @@ ACT 2 · THE MOTION CRYPTS         ACT 3 · THE NEON GRID
 
 ---
 
-## Install & play
+## Installation
 
-Requires **Go 1.24+**.
+**With Go (recommended)** — requires **Go 1.24+**. Lessons are embedded in the binary, so
+it runs from anywhere:
+
+```sh
+go install github.com/StrangeNoob/nvim-quest@latest
+nvim-quest
+```
+
+This installs to `$(go env GOPATH)/bin` (add it to your `PATH` if it isn't already).
+
+**Prebuilt binary** — download the archive for your OS/arch from the
+[Releases](https://github.com/StrangeNoob/nvim-quest/releases) page, extract it, and put
+the `nvim-quest` binary on your `PATH`:
+
+```sh
+# example: macOS (Apple Silicon)
+tar -xzf nvim-quest_*_darwin_arm64.tar.gz
+sudo mv nvim-quest /usr/local/bin/
+```
+
+> Keep the binary named `nvim-quest` so `nvim-quest update` can self-replace it.
+
+**From source** — clone the repo and:
 
 ```sh
 go run .            # start the game
@@ -35,25 +57,18 @@ go run . stats      # print a progress summary
 go run . reset      # erase all progress (asks to confirm)
 ```
 
-Install it to run from anywhere — lessons are embedded in the binary, so there's no
-working-directory requirement:
+## Play
 
 ```sh
-go install .
-nvim-quest
-```
-
-Or grab a prebuilt binary for your OS/arch from the
-[Releases](https://github.com/StrangeNoob/nvim-quest/releases) page.
-
-```sh
+nvim-quest           # start the game
 nvim-quest version   # version, commit, build date
 nvim-quest update    # self-update to the latest release
 ```
 
 When a newer release exists, the title screen shows a `✨ vX available` notice (a
 throttled, background check; disable it with `--no-update-check` or the
-`NVIM_QUEST_NO_UPDATE_CHECK` env var).
+`NVIM_QUEST_NO_UPDATE_CHECK` env var). To upgrade, run `nvim-quest update` (or
+`go install github.com/StrangeNoob/nvim-quest@latest`).
 
 Your progress is saved to `~/.nvim-quest/progress.json`.
 

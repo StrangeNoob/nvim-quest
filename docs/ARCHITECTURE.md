@@ -2,7 +2,8 @@
 
 nvim-quest is a single Go binary built on [Bubble Tea](https://github.com/charmbracelet/bubbletea)
 (TUI), [Lipgloss](https://github.com/charmbracelet/lipgloss) (styling), and
-[Cobra](https://github.com/spf13/cobra) (CLI). The module is `nvim-quest`, Go 1.24.
+[Cobra](https://github.com/spf13/cobra) (CLI). The module is
+`github.com/StrangeNoob/nvim-quest`, Go 1.24.
 
 ## Package layout
 

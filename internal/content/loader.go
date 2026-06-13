@@ -6,7 +6,7 @@ import (
 	"sort"
 	"strings"
 
-	"nvim-quest/assets"
+	"github.com/StrangeNoob/nvim-quest/assets"
 )
 
 // All returns every embedded lesson, sorted by (act, order).

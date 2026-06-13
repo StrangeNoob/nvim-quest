@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"nvim-quest/internal/progress"
+	"github.com/StrangeNoob/nvim-quest/internal/progress"
 )
 
 var statsCmd = &cobra.Command{

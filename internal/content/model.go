@@ -1,7 +1,7 @@
 // Package content loads the embedded lesson JSON files.
 package content
 
-import "nvim-quest/internal/engine"
+import "github.com/StrangeNoob/nvim-quest/internal/engine"
 
 type Lesson struct {
 	ID         string      `json:"id"`

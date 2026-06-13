@@ -3,7 +3,7 @@ package content
 import (
 	"testing"
 
-	"nvim-quest/internal/engine"
+	"github.com/StrangeNoob/nvim-quest/internal/engine"
 )
 
 // TestEveryChallengeIsSolvable plays an authored optimal solution through the
