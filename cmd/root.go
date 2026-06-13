@@ -76,8 +76,10 @@ func updateChecker() func() string {
 			defer cancel()
 			if v, err := update.Latest(ctx); err == nil && v != "" {
 				latest = v
-				_ = update.Save(path, update.Cache{LastCheck: time.Now(), LatestVersion: v})
 			}
+			// Record the attempt regardless of outcome so an offline/failed check
+			// still honors the 24h throttle instead of re-querying every launch.
+			_ = update.Save(path, update.Cache{LastCheck: time.Now(), LatestVersion: latest})
 		}
 		if update.Newer(version, latest) {
 			return latest

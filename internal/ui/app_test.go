@@ -65,7 +65,10 @@ func TestWelcomeScreen(t *testing.T) {
 }
 
 func TestUpdateNoticeOnTitle(t *testing.T) {
-	lessons, _ := content.All()
+	lessons, err := content.All()
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	// checkUpdate reports a newer version → Init delivers it → title shows the notice.
 	m := New(lessons, progress.New(), t.TempDir(), "v0.1.0", func() string { return "v0.2.0" })
