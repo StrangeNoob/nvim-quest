@@ -1,85 +1,45 @@
 # nvim-quest
 
-`nvim-quest` is a beginner-friendly terminal game for learning Neovim and Vim basics. It teaches motions, editing, yank and paste, and search through small interactive missions with XP, streaks, hints, and badges.
+Learn Neovim through an epic three-act terminal quest — no Neovim required.
 
-V1 uses a lightweight Vim command simulator. It does not launch or require Neovim.
+Real Vim keystrokes, instantly. Press `d` then `w` and the word vanishes,
+exactly like the real editor. Earn stars by solving rooms under par (golf!),
+build combo streaks, guard your hearts, and beat the clock in boss fights.
 
-## Install
+## The journey
 
-Requires Go 1.23 or newer.
+- **Act I · The Cursor Dojo** — modes, `hjkl`, `w`/`b`, `0` `$` `gg` `G`
+- **Act II · The Motion Crypts** — `i`/`a`, `x` `dw` `dd`, `yy` `p`, `cw` `cc`
+- **Act III · The Neon Grid** — `/` search and `n`, count prefixes (`4w`, `3dd`)
 
-```bash
-go install .
+Each act ends in a timed boss fight.
+
+## Play
+
+```sh
+go run .            # start the game
+go run . stats      # progress summary
+go run . reset      # wipe progress
 ```
 
-Run from the project directory so the bundled `lessons/` directory is available.
+Or install it: `go install .` then run `nvim-quest` from anywhere
+(lessons are embedded — no working-directory requirement).
 
-## Run
+Progress saves to `~/.nvim-quest/progress.json`.
 
-```bash
-go run . start
-go run . lesson 002-motions
-go run . practice delete
-go run . stats
-go run . reset
-```
+## Develop
 
-Practice topics are `motions`, `insert`, `delete`, `yank-paste`, and `search`.
-
-## Example Gameplay
-
-```text
-nvim-quest  Lesson 002-motions
-Reach the target
-
-Objective
-Move the cursor to the word TARGET using h, j, k, l.
-
-Buffer
- 1  alpha beta gamma
- 2  delta TARGET omega
-
-Command
-> j
-
-Feedback
-Command applied. Keep going.
-```
-
-Type a command and press Enter. Use `?` to toggle the hint, `q` to quit, and `Ctrl+c` to quit at any time.
-
-Supported commands:
-
-- Motions: `h`, `j`, `k`, `l`, `w`, `b`, `0`, `$`, `gg`, `G`
-- Editing: `x`, `dw`, `dd`, `yy`, `p`, `iTEXT<Esc>`, `aTEXT<Esc>`, `u`
-- Search: `/word`, `n`
-
-Progress is saved to `~/.nvim-quest/progress.json`.
-
-## Lesson Roadmap
-
-1. Meet Normal and Insert mode
-2. Basic movement
-3. Word and file motions
-4. Insert and append
-5. Delete with intent
-6. Yank and paste
-7. Search the buffer
-
-## Development
-
-```bash
-gofmt -w .
+```sh
 go test ./...
 ```
 
-## Future Ideas
+Lessons are JSON files in `assets/lessons/` — add one and the content
+integrity test validates it automatically.
 
-- Real Neovim integration
-- Daily challenge
-- Leaderboard
-- Config file
-- Custom lessons
-- Macros
-- Visual mode
-- Splits and buffers
+Curriculum inspired by
+[Learn-Vim-and-NeoVim](https://github.com/rcallaby/Learn-Vim-and-NeoVim).
+
+## Roadmap
+
+- **Solid:** `e`, `o`/`O`, `P`, `ciw`, `f`/`t`, `:%s/old/new/g`, undo lesson
+- **Everything:** visual mode, visual block, marks, registers, macros

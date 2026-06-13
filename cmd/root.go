@@ -1,18 +1,29 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
+
+	"nvim-quest/internal/content"
+	"nvim-quest/internal/progress"
+	"nvim-quest/internal/ui"
 )
 
 var rootCmd = &cobra.Command{
 	Use:   "nvim-quest",
 	Short: "Learn Neovim through an epic three-act terminal quest",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("nvim-quest v2 — game wiring lands in a later task")
-		return nil
+		lessons, err := content.All()
+		if err != nil {
+			return err
+		}
+		path := progress.DefaultPath()
+		prog := progress.Load(path)
+		p := tea.NewProgram(ui.New(lessons, prog, path), tea.WithAltScreen())
+		_, err = p.Run()
+		return err
 	},
 }
 
