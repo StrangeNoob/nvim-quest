@@ -1,0 +1,27 @@
+{
+  "id": "act2-08-opening-lines",
+  "act": 2, "order": 8,
+  "title": "Opening Lines",
+  "story": "Some inscriptions need a fresh line. o opens one below, O opens one above — both drop you straight into insert stance.",
+  "challenges": [
+    {
+      "id": "a2l8c1",
+      "intro": "A second verse belongs below. Open a new line and write 'dark'.",
+      "buffer": ["light"], "cursor": [0, 0],
+      "goal": { "type": "bufferEquals", "lines": ["light", "dark"] },
+      "par": 5, "xp": 60,
+      "hint": "o opens a new line below and enters insert stance.",
+      "newKeys": ["o", "O"],
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "o", "O", "u", "ctrl+r", "x", "d", "y", "p", "P", "c"]
+    },
+    {
+      "id": "a2l8c2",
+      "intro": "A title belongs above. Open a line over the text and write 'first'.",
+      "buffer": ["second"], "cursor": [0, 0],
+      "goal": { "type": "bufferEquals", "lines": ["first", "second"] },
+      "par": 6, "xp": 60,
+      "hint": "O opens a new line above the current one.",
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "o", "O", "u", "ctrl+r", "x", "d", "y", "p", "P", "c"]
+    }
+  ]
+}

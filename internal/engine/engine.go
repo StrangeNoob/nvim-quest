@@ -47,9 +47,11 @@ type Simulator struct {
 	opCount      int
 	pendingCount int
 	pendingG     bool
+	pendingInner bool // a text-object prefix (the "i" of diw/ciw) is armed
 
 	yank []string
 	undo []snapshot
+	redo []snapshot
 
 	SearchQuery string
 	lastSearch  string
@@ -61,7 +63,7 @@ func New(lines []string, cursor Pos) *Simulator {
 	return &Simulator{Buffer: buf, Cursor: cursor}
 }
 
-// Pending returns the visible pending state ("d", "3", "3d", "g") for the HUD.
+// Pending returns the visible pending state ("d", "3", "3d", "di", "g") for the HUD.
 func (s *Simulator) Pending() string {
 	out := ""
 	if s.pendingOp != "" {
@@ -69,6 +71,9 @@ func (s *Simulator) Pending() string {
 			out += strconv.Itoa(s.opCount)
 		}
 		out += s.pendingOp
+		if s.pendingInner {
+			out += "i" // the inner text-object prefix (di/ci) is armed
+		}
 	} else if s.pendingCount > 0 {
 		out += strconv.Itoa(s.pendingCount)
 	}
@@ -155,10 +160,20 @@ func (s *Simulator) pressNormal(key string) Event {
 		}
 		s.Mode = ModeInsert
 		return Event{EvModeChanged}
+	case "o":
+		s.openLine(true)
+		return Event{EvModeChanged}
+	case "O":
+		s.openLine(false)
+		return Event{EvModeChanged}
 	case "u":
 		return s.applyUndo()
+	case "ctrl+r":
+		return s.applyRedo()
 	case "p":
 		return s.paste()
+	case "P":
+		return s.pasteBefore()
 	case "/":
 		s.Mode = ModeSearch
 		s.SearchQuery = ""
@@ -177,6 +192,7 @@ func (s *Simulator) clearPending() {
 	s.opCount = 0
 	s.pendingCount = 0
 	s.pendingG = false
+	s.pendingInner = false
 }
 
 func (s *Simulator) takeCount() int {

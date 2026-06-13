@@ -71,6 +71,14 @@ func TestPendingDisplay(t *testing.T) {
 	if got := s2.Pending(); got != "" {
 		t.Errorf("Pending() after esc = %q, want empty", got)
 	}
+
+	// The inner text-object prefix shows in the HUD (d → i = "di").
+	s3 := New([]string{"foo bar"}, Pos{0, 0})
+	s3.Press("d")
+	s3.Press("i")
+	if got := s3.Pending(); got != "di" {
+		t.Errorf("Pending() after d,i = %q, want %q", got, "di")
+	}
 }
 
 func TestAllowedKeysAndInvalid(t *testing.T) {

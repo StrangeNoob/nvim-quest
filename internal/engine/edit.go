@@ -39,6 +39,29 @@ func (s *Simulator) deleteChar() {
 }
 
 func (s *Simulator) applyOperator(key string) Event {
+	// Text object: d/c followed by "i" arms the inner-object prefix; the next key
+	// (e.g. w) completes it as diw/ciw.
+	if !s.pendingInner && (s.pendingOp == "d" || s.pendingOp == "c") && key == "i" {
+		s.pendingInner = true
+		return Event{EvPending}
+	}
+	if s.pendingInner {
+		op := s.pendingOp
+		s.clearPending()
+		if key == "w" {
+			s.snapshot()
+			s.deleteInnerWord()
+			if op == "c" {
+				// ciw: stay at the word's start (may be end-of-line, a valid
+				// insert position) and enter insert; do NOT normal-mode clamp.
+				s.Mode = ModeInsert
+				return Event{EvModeChanged}
+			}
+			s.clampCol() // diw: settle the cursor on a valid normal-mode column
+			return Event{EvEdited}
+		}
+		return Event{EvInvalid}
+	}
 	op := s.pendingOp
 	s.pendingOp = ""
 	n := s.opCount * s.takeCount()
@@ -129,16 +152,22 @@ func (s *Simulator) yankLines(n int) {
 	s.yank = append([]string(nil), s.Buffer[row:end]...)
 }
 
-func (s *Simulator) snapshot() {
+func (s *Simulator) currentSnapshot() snapshot {
 	buf := make([]string, len(s.Buffer))
 	copy(buf, s.Buffer)
-	s.undo = append(s.undo, snapshot{buffer: buf, cursor: s.Cursor})
+	return snapshot{buffer: buf, cursor: s.Cursor}
+}
+
+func (s *Simulator) snapshot() {
+	s.undo = append(s.undo, s.currentSnapshot())
+	s.redo = nil // a new change invalidates the redo history
 }
 
 func (s *Simulator) applyUndo() Event {
 	if len(s.undo) == 0 {
 		return Event{EvNone}
 	}
+	s.redo = append(s.redo, s.currentSnapshot())
 	last := s.undo[len(s.undo)-1]
 	s.undo = s.undo[:len(s.undo)-1]
 	s.Buffer = last.buffer
@@ -146,17 +175,71 @@ func (s *Simulator) applyUndo() Event {
 	return Event{EvEdited}
 }
 
-func (s *Simulator) paste() Event {
+func (s *Simulator) applyRedo() Event {
+	if len(s.redo) == 0 {
+		return Event{EvNone}
+	}
+	s.undo = append(s.undo, s.currentSnapshot())
+	last := s.redo[len(s.redo)-1]
+	s.redo = s.redo[:len(s.redo)-1]
+	s.Buffer = last.buffer
+	s.Cursor = last.cursor
+	return Event{EvEdited}
+}
+
+func (s *Simulator) paste() Event { return s.pasteAt(s.Cursor.Row + 1) }
+
+func (s *Simulator) pasteBefore() Event { return s.pasteAt(s.Cursor.Row) }
+
+// pasteAt inserts the yank register's lines starting at row `at`, moving the
+// cursor to the first pasted line. No-op on an empty register.
+func (s *Simulator) pasteAt(at int) Event {
 	if len(s.yank) == 0 {
 		return Event{EvNone}
 	}
 	s.snapshot()
-	row := s.Cursor.Row
 	out := make([]string, 0, len(s.Buffer)+len(s.yank))
-	out = append(out, s.Buffer[:row+1]...)
+	out = append(out, s.Buffer[:at]...)
 	out = append(out, s.yank...)
-	out = append(out, s.Buffer[row+1:]...)
+	out = append(out, s.Buffer[at:]...)
 	s.Buffer = out
-	s.Cursor = Pos{row + 1, 0}
+	s.Cursor = Pos{at, 0}
 	return Event{EvEdited}
+}
+
+// openLine inserts a new empty line below (or above) the cursor's line and
+// enters Insert mode, like Vim's o / O.
+func (s *Simulator) openLine(below bool) {
+	s.snapshot()
+	at := s.Cursor.Row
+	if below {
+		at++
+	}
+	out := make([]string, 0, len(s.Buffer)+1)
+	out = append(out, s.Buffer[:at]...)
+	out = append(out, "")
+	out = append(out, s.Buffer[at:]...)
+	s.Buffer = out
+	s.Cursor = Pos{at, 0}
+	s.Mode = ModeInsert
+}
+
+// deleteInnerWord removes the whole space-delimited word the cursor sits on
+// (no trailing space), leaving the cursor at the word's start (diw / ciw).
+func (s *Simulator) deleteInnerWord() {
+	line := s.line()
+	col := s.Cursor.Col
+	if col >= len(line) || line[col] == ' ' {
+		return
+	}
+	start := col
+	for start > 0 && line[start-1] != ' ' {
+		start--
+	}
+	end := col
+	for end < len(line) && line[end] != ' ' {
+		end++
+	}
+	s.setLine(line[:start] + line[end:])
+	s.Cursor.Col = start // caller clamps for diw; ciw keeps this as the insert point
 }

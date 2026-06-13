@@ -1,0 +1,27 @@
+{
+  "id": "act2-10-rewind",
+  "act": 2, "order": 10,
+  "title": "Rewind",
+  "story": "No move is final. u rewinds your last change; Ctrl-r replays it. The fearless editor wields both — cut boldly, knowing you can always step back.",
+  "challenges": [
+    {
+      "id": "a2l10c1",
+      "intro": "Burn the false line. (If you ever strike the wrong one, u brings it back.)",
+      "buffer": ["keep me", "BURN THIS LINE"], "cursor": [1, 0],
+      "goal": { "type": "lineDeleted", "line": "BURN THIS LINE" },
+      "par": 2, "xp": 60,
+      "hint": "dd deletes the line. Press u to undo a mistake, Ctrl-r to redo it.",
+      "newKeys": ["u", "ctrl+r"],
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "o", "O", "u", "ctrl+r", "x", "d", "y", "p", "P", "c"]
+    },
+    {
+      "id": "a2l10c2",
+      "intro": "Echo the word once more. Then try u and Ctrl-r to feel time bend.",
+      "buffer": ["echo"], "cursor": [0, 0],
+      "goal": { "type": "bufferEquals", "lines": ["echo", "echo"] },
+      "par": 3, "xp": 60,
+      "hint": "yy then p makes the copy. u removes it; Ctrl-r brings it back.",
+      "allowedKeys": ["h", "j", "k", "l", "w", "b", "0", "$", "g", "G", "i", "a", "o", "O", "u", "ctrl+r", "x", "d", "y", "p", "P", "c"]
+    }
+  ]
+}
