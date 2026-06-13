@@ -39,8 +39,33 @@ func newTestModel(t *testing.T) Model {
 	return New(lessons, progress.New(), filepath.Join(t.TempDir(), "progress.json"))
 }
 
+func TestWelcomeScreen(t *testing.T) {
+	// A fresh player (no rooms cleared) meets the welcome screen first.
+	m := newTestModel(t)
+	if m.scr != screenWelcome {
+		t.Fatalf("fresh player initial screen = %v, want welcome", m.scr)
+	}
+	m = press(t, m, "enter")
+	if m.scr != screenTitle {
+		t.Fatalf("after enter screen = %v, want title", m.scr)
+	}
+
+	// A returning player (has cleared a room) skips straight to the title.
+	lessons, err := content.All()
+	if err != nil {
+		t.Fatal(err)
+	}
+	prog := progress.New()
+	prog.MarkCompleted("a1l1c1")
+	r := New(lessons, prog, t.TempDir())
+	if r.scr != screenTitle {
+		t.Fatalf("returning player initial screen = %v, want title", r.scr)
+	}
+}
+
 func TestTitleNavigation(t *testing.T) {
 	m := newTestModel(t)
+	m.scr = screenTitle // past the first-launch welcome
 	if m.scr != screenTitle {
 		t.Fatalf("initial screen = %v, want title", m.scr)
 	}
@@ -65,6 +90,7 @@ func TestTitleNavigation(t *testing.T) {
 func TestArrowKeysDoNotNavigate(t *testing.T) {
 	// This is a Vim trainer: only j/k move, never the arrow keys.
 	m := newTestModel(t)
+	m.scr = screenTitle // past the first-launch welcome
 	mm, _ := m.Update(tea.KeyMsg{Type: tea.KeyDown})
 	m = mm.(Model)
 	if m.menuIdx != 0 {

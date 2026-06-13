@@ -247,6 +247,9 @@ func (m Model) viewRoom() string {
 		b.WriteString(fmt.Sprintf("%s — room %d/%d\n", l.Title, m.chIdx+1, len(l.Challenges)))
 		b.WriteString(dimStyle.Render(l.Story) + "\n\n")
 	}
+	if m.isFreshPlayer() && !m.inBoss {
+		b.WriteString(m.renderFirstTimeHelp() + "\n")
+	}
 	b.WriteString(ch.Intro + "\n\n")
 	b.WriteString(m.renderBuffer() + "\n\n")
 	b.WriteString(m.renderHUD(ch) + "\n")
@@ -260,6 +263,22 @@ func (m Model) viewRoom() string {
 		b.WriteString(dangerStyle.Render("warning: could not save progress: "+m.saveErr) + "\n")
 	}
 	b.WriteString(dimStyle.Render("[?] hint · [esc] back to map"))
+	return b.String()
+}
+
+// renderFirstTimeHelp is the one-time "NEW HERE?" legend shown in a room while
+// the player has not yet cleared their first room. It explains the HUD symbols
+// a newcomer has no other way to decode.
+func (m Model) renderFirstTimeHelp() string {
+	bold := lipgloss.NewStyle().Bold(true)
+	rule := dimStyle.Render(strings.Repeat("─", 52))
+	var b strings.Builder
+	b.WriteString(dimStyle.Render("─ NEW HERE? ") + dimStyle.Render(strings.Repeat("─", 40)) + "\n")
+	b.WriteString(" " + dimStyle.Render("-- NORMAL --") + " is command mode — press " + bold.Render("i") + " to type, " + bold.Render("Esc") + " to return\n")
+	b.WriteString(" ♥ hearts: a wrong key costs one (3 per room)\n")
+	b.WriteString(" ⚡ combo: clearing rooms cleanly multiplies your XP\n")
+	b.WriteString(" par: solve in this many keys (or fewer) for ⭐⭐⭐\n")
+	b.WriteString(rule)
 	return b.String()
 }
 

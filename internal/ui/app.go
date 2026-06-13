@@ -18,6 +18,7 @@ const (
 	screenStats
 	screenRoom
 	screenResults
+	screenWelcome
 )
 
 type Model struct {
@@ -56,12 +57,22 @@ type Model struct {
 }
 
 func New(lessons []content.Lesson, prog *progress.Progress, savePath string) Model {
-	return Model{
+	m := Model{
 		width: 80, height: 24,
 		lessons: lessons, prog: prog, savePath: savePath,
 		combo: 1, actHeartsLost: map[int]bool{},
 	}
+	// A brand-new player meets the welcome screen before anything else.
+	if m.isFreshPlayer() {
+		m.scr = screenWelcome
+	}
+	return m
 }
+
+// isFreshPlayer reports whether the player has not yet cleared a single room.
+// First-time guidance (the welcome screen, the in-room legend) shows only while
+// this is true and disappears for good once the first room is cleared.
+func (m *Model) isFreshPlayer() bool { return len(m.prog.Completed) == 0 }
 
 func (m Model) Init() tea.Cmd { return nil }
 
@@ -76,6 +87,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	}
 	switch m.scr {
+	case screenWelcome:
+		return m.updateWelcome(msg)
 	case screenMap:
 		return m.updateMap(msg)
 	case screenStats:
@@ -95,6 +108,8 @@ func (m Model) View() string {
 	}
 	var body string
 	switch m.scr {
+	case screenWelcome:
+		body = m.viewWelcome()
 	case screenMap:
 		body = m.viewMap()
 	case screenStats:
