@@ -24,7 +24,7 @@ var GoalTypes = []string{
 func (g Goal) Met(s *Simulator) bool {
 	switch g.Type {
 	case "cursorOnWord":
-		return s.WordAtCursor() == g.Word
+		return g.Word != "" && s.WordAtCursor() == g.Word
 	case "bufferEquals":
 		return slices.Equal(s.Buffer, g.Lines)
 	case "lineDeleted":
@@ -44,6 +44,9 @@ func (g Goal) Met(s *Simulator) bool {
 		}
 		return false
 	case "searchMatchActive":
+		if g.Term == "" {
+			return false
+		}
 		line := s.line()
 		if s.Cursor.Col >= len(line) {
 			return false

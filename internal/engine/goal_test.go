@@ -43,6 +43,10 @@ func TestGoals(t *testing.T) {
 			func() *Simulator { return New([]string{"a backdoor hides"}, Pos{0, 2}) }, false},
 		{"unknown goal type is never met", Goal{Type: "bogus"},
 			func() *Simulator { return New([]string{"a"}, Pos{0, 0}) }, false},
+		{"cursorOnWord with empty word is never met", Goal{Type: "cursorOnWord", Word: ""},
+			func() *Simulator { return New([]string{""}, Pos{0, 0}) }, false},
+		{"searchMatchActive with empty term is never met", Goal{Type: "searchMatchActive", Term: ""},
+			func() *Simulator { return New([]string{"hello"}, Pos{0, 0}) }, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
