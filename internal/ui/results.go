@@ -43,12 +43,15 @@ func (m Model) updateResults(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) viewResults() string {
+	if m.resGameComplete {
+		return m.viewFinale()
+	}
 	l := m.lessons[m.lessonIdx]
 	pal := paletteFor(l.Act)
 	var b strings.Builder
 	title := "✦ ROOM CLEAR ✦"
 	if m.resWasBoss {
-		title = "⚔ ACT COMPLETE ⚔"
+		title = fmt.Sprintf("⚔ ACT %s COMPLETE ⚔", roman(l.Act))
 	}
 	if m.resFailed {
 		title = "✖ THE TIMER RAN OUT ✖"
@@ -65,6 +68,9 @@ func (m Model) viewResults() string {
 		b.WriteString(dimStyle.Render("[enter] try again · [esc] world map"))
 		return b.String()
 	}
+	if m.resWasBoss && l.Boss != nil {
+		b.WriteString(successStyle.Render(l.Boss.Name+" defeated!") + "\n")
+	}
 	if !m.resWasBoss {
 		b.WriteString(strings.Repeat("⭐", m.resStars) + strings.Repeat("☆", 3-m.resStars) + "\n")
 	}
@@ -77,6 +83,53 @@ func (m Model) viewResults() string {
 		b.WriteString(successStyle.Render("🏅 new badge: "+badge) + "\n")
 	}
 	b.WriteString(fmt.Sprintf("\nlevel %d · %d XP · combo ⚡x%d\n", m.prog.Level, m.prog.XP, m.combo))
+
+	// On a boss clear, announce the act that just unlocked so progression is clear.
+	if m.resWasBoss && m.lessonIdx+1 < len(m.lessons) {
+		next := m.lessons[m.lessonIdx+1]
+		np := paletteFor(next.Act)
+		b.WriteString("\n" + dimStyle.Render(strings.Repeat("─", 40)) + "\n")
+		b.WriteString(np.PrimaryStyle().Bold(true).Render(
+			fmt.Sprintf("UNLOCKED ▶ ACT %s · %s", roman(next.Act), actName(next.Act))) + "\n")
+		b.WriteString(dimStyle.Render("learn: "+actSummary(next.Act)) + "\n")
+		b.WriteString("\n" + dimStyle.Render("[enter] enter the next act · [esc] world map"))
+		return b.String()
+	}
 	b.WriteString("\n" + dimStyle.Render("[enter] onward · [esc] world map"))
 	return b.String()
+}
+
+// viewFinale is the celebration shown after the final boss is cleared.
+func (m Model) viewFinale() string {
+	pal := paletteFor(3)
+	stars, maxStars := 0, 0
+	for _, l := range m.lessons {
+		for _, ch := range l.Challenges {
+			maxStars += 3
+			stars += m.prog.Stars[ch.ID]
+		}
+	}
+	var b strings.Builder
+	b.WriteString(pal.PrimaryStyle().Bold(true).Render("🎉  YOU MASTERED THE BLADE CURSOR  🎉") + "\n\n")
+	b.WriteString("The Grid Core is broken. The journey is complete.\n\n")
+	b.WriteString(successStyle.Render(fmt.Sprintf("level %d · %d XP · ⭐ %d/%d stars", m.prog.Level, m.prog.XP, stars, maxStars)) + "\n")
+	b.WriteString(fmt.Sprintf("%d rooms cleared · 🏅 %d badges\n", len(m.prog.Completed), len(m.prog.Badges)))
+	if len(m.prog.Badges) > 0 {
+		b.WriteString(dimStyle.Render(strings.Join(m.prog.Badges, " · ")) + "\n")
+	}
+	b.WriteString("\n" + dimStyle.Render("[enter] return to your journey"))
+	return b.String()
+}
+
+// roman renders an act number (1-3) as a Roman numeral for the act headings.
+func roman(n int) string {
+	switch n {
+	case 1:
+		return "I"
+	case 2:
+		return "II"
+	case 3:
+		return "III"
+	}
+	return fmt.Sprint(n)
 }

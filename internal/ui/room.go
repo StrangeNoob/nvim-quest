@@ -67,6 +67,7 @@ func (m Model) startChallenge() Model {
 	m.hearts = 3
 	m.showHint = false
 	m.flash = false
+	m.heartMsg = ""
 	return m
 }
 
@@ -80,6 +81,7 @@ func (m Model) startBoss() (Model, tea.Cmd) {
 	m.hearts = 3
 	m.showHint = false
 	m.flash = false
+	m.heartMsg = ""
 	m.timeLeft = boss.TimeLimitSec
 	m.tickGen++
 	return m, tickCmd(m.tickGen)
@@ -103,6 +105,7 @@ func (m Model) updateRoom(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if m.timeLeft <= 0 {
 			m.resFailed = true
 			m.resWasBoss = true
+			m.resGameComplete = false
 			m.resStars, m.resXP, m.resBadges = 0, 0, nil
 			m.combo = 1
 			m.scr = screenResults
@@ -120,6 +123,8 @@ func (m Model) updateRoom(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, nil
 		}
 		key := normalizeKey(msg)
+		// Clear the heart-loss notice on any keystroke; an invalid key resets it below.
+		m.heartMsg = ""
 		if key == "esc" && m.sim.Mode == engine.ModeNormal {
 			m.scr = screenMap
 			m.mapIdx = m.lessonIdx
@@ -136,6 +141,7 @@ func (m Model) updateRoom(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if ev.Kind == engine.EvInvalid {
 			m.hearts--
 			m.combo = 1
+			m.heartMsg = fmt.Sprintf("✗ %s won't work here — that key isn't part of this room (lost a heart ♥)", keyLabel(key))
 			m.actHeartsLost[m.lessons[m.lessonIdx].Act] = true
 			if m.hearts <= 0 {
 				if m.inBoss {
@@ -171,7 +177,7 @@ func (m Model) awardChallenge() (tea.Model, tea.Cmd) {
 	stars := game.Stars(m.keystrokes, ch.Par)
 	m.resStars = stars
 	m.resXP, m.resBadges = 0, nil
-	m.resFailed, m.resWasBoss = false, false
+	m.resFailed, m.resWasBoss, m.resGameComplete = false, false, false
 	if !m.prog.IsCompleted(ch.ID) {
 		m.resXP = game.XP(ch.XP, m.combo)
 		m.prog.XP += m.resXP
@@ -203,6 +209,7 @@ func (m Model) awardBoss() (tea.Model, tea.Cmd) {
 	m.resStars, m.resXP, m.resBadges = 0, 0, nil
 	m.resFailed = false
 	m.resWasBoss = true
+	m.resGameComplete = m.lessonIdx == len(m.lessons)-1 // final boss → finale
 	if !m.prog.IsCompleted(bossID) {
 		m.resXP = game.XP(l.Boss.XP, m.combo)
 		m.prog.XP += m.resXP
@@ -253,6 +260,9 @@ func (m Model) viewRoom() string {
 	b.WriteString(ch.Intro + "\n\n")
 	b.WriteString(m.renderBuffer() + "\n\n")
 	b.WriteString(m.renderHUD(ch) + "\n")
+	if m.heartMsg != "" && !m.flash {
+		b.WriteString(dangerStyle.Render(m.heartMsg) + "\n")
+	}
 	if m.showHint {
 		hint := ch.Hint
 		if hint == "" {

@@ -21,6 +21,11 @@ func paletteFor(act int) Palette {
 	return palettes[1]
 }
 
+// PrimaryStyle is a lipgloss style foregrounded with the palette's primary color.
+func (p Palette) PrimaryStyle() lipgloss.Style {
+	return lipgloss.NewStyle().Foreground(p.Primary)
+}
+
 func actName(act int) string {
 	switch act {
 	case 1:
@@ -29,6 +34,19 @@ func actName(act int) string {
 		return "THE MOTION CRYPTS"
 	case 3:
 		return "THE NEON GRID"
+	}
+	return ""
+}
+
+// actSummary is the short "what you'll learn here" line shown when an act unlocks.
+func actSummary(act int) string {
+	switch act {
+	case 1:
+		return "h/j/k/l · w/b · 0/$ · gg/G"
+	case 2:
+		return "i/a · x · dw · dd · yy/p · cw · cc"
+	case 3:
+		return "/ search · n · counts (4w, 3dd)"
 	}
 	return ""
 }

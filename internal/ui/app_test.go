@@ -159,6 +159,74 @@ func TestMapLockAndEnter(t *testing.T) {
 	}
 }
 
+// bossLessonIdx finds the index of the lesson carrying the given act's boss,
+// so tests don't depend on absolute lesson positions.
+func bossLessonIdx(m Model, act int) int {
+	for i, l := range m.lessons {
+		if l.Act == act && l.Boss != nil {
+			return i
+		}
+	}
+	return -1
+}
+
+func TestNextActAnnouncementOnBossClear(t *testing.T) {
+	m := newTestModel(t)
+	m.lessonIdx = bossLessonIdx(m, 1) // the Act I boss (Sensei's Trial)
+	if m.lessonIdx < 0 {
+		t.Fatal("no Act I boss lesson found")
+	}
+	m.inBoss = true
+	mm, _ := m.awardBoss()
+	m = mm.(Model)
+	if m.resGameComplete {
+		t.Fatal("the Act I boss is not the finale")
+	}
+	m.scr = screenResults
+	v := m.View()
+	if !strings.Contains(v, "UNLOCKED") || !strings.Contains(v, "THE MOTION CRYPTS") {
+		t.Errorf("boss-clear results should announce the next act; got:\n%s", v)
+	}
+}
+
+func TestFinaleOnFinalBoss(t *testing.T) {
+	m := newTestModel(t)
+	m.lessonIdx = len(m.lessons) - 1 // the final boss (Act III · The Grid Core)
+	m.inBoss = true
+	mm, _ := m.awardBoss()
+	m = mm.(Model)
+	if !m.resGameComplete {
+		t.Fatal("clearing the final boss should set resGameComplete")
+	}
+	m.scr = screenResults
+	if v := m.View(); !strings.Contains(v, "MASTERED") {
+		t.Errorf("finale should celebrate mastery; got:\n%s", v)
+	}
+}
+
+func TestHeartMessageExplainsLoss(t *testing.T) {
+	m := newTestModel(t)
+	m, _ = m.openLesson(0) // a1l1c1 allows only "i"
+	m = press(t, m, "z")   // disallowed → loses a heart
+	if m.heartMsg == "" {
+		t.Fatal("an invalid key should set a heart message")
+	}
+	if !strings.Contains(m.View(), "lost a heart") {
+		t.Errorf("room should explain why the heart was lost; got:\n%s", m.View())
+	}
+	// Toggling the hint must also clear the notice (regression: early-return path).
+	m = press(t, m, "?")
+	if m.heartMsg != "" {
+		t.Errorf("pressing ? should clear the heart message, got %q", m.heartMsg)
+	}
+	// And a normal valid key clears it too.
+	m = press(t, m, "z") // lose another heart to re-set the message
+	m = press(t, m, "i") // valid key
+	if m.heartMsg != "" {
+		t.Errorf("a valid key should clear the heart message, got %q", m.heartMsg)
+	}
+}
+
 func TestPlayThroughFirstChallenge(t *testing.T) {
 	m := newTestModel(t)
 	m, _ = m.openLesson(0)
