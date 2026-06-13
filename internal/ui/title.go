@@ -66,6 +66,10 @@ func (m Model) viewTitle() string {
 		b.WriteString(style.Render(line) + "\n")
 	}
 	b.WriteString("\n" + dimStyle.Render(fmt.Sprintf("level %d · %d XP", m.prog.Level, m.prog.XP)))
+	if m.updateLatest != "" {
+		b.WriteString("\n" + successStyle.Render(
+			fmt.Sprintf("✨ %s available — run `nvim-quest update`", m.updateLatest)))
+	}
 	return b.String()
 }
 

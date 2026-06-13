@@ -37,7 +37,7 @@ func newTestModel(t *testing.T) Model {
 	if err != nil {
 		t.Fatal(err)
 	}
-	return New(lessons, progress.New(), filepath.Join(t.TempDir(), "progress.json"))
+	return New(lessons, progress.New(), filepath.Join(t.TempDir(), "progress.json"), "dev", nil)
 }
 
 func TestWelcomeScreen(t *testing.T) {
@@ -58,9 +58,42 @@ func TestWelcomeScreen(t *testing.T) {
 	}
 	prog := progress.New()
 	prog.MarkCompleted("a1l1c1")
-	r := New(lessons, prog, t.TempDir())
+	r := New(lessons, prog, t.TempDir(), "dev", nil)
 	if r.scr != screenTitle {
 		t.Fatalf("returning player initial screen = %v, want title", r.scr)
+	}
+}
+
+func TestUpdateNoticeOnTitle(t *testing.T) {
+	lessons, err := content.All()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// checkUpdate reports a newer version → Init delivers it → title shows the notice.
+	m := New(lessons, progress.New(), t.TempDir(), "v0.1.0", func() string { return "v0.2.0" })
+	cmd := m.Init()
+	if cmd == nil {
+		t.Fatal("Init should return a check command when checkUpdate is set")
+	}
+	mm, _ := m.Update(cmd())
+	m = mm.(Model)
+	m.scr = screenTitle
+	if m.updateLatest != "v0.2.0" {
+		t.Fatalf("updateLatest = %q, want v0.2.0", m.updateLatest)
+	}
+	if !strings.Contains(m.View(), "v0.2.0 available") {
+		t.Error("title should show the update notice")
+	}
+
+	// No checkUpdate (dev/disabled) → Init is a no-op, no notice.
+	d := New(lessons, progress.New(), t.TempDir(), "dev", nil)
+	if d.Init() != nil {
+		t.Error("Init should be nil when checkUpdate is disabled")
+	}
+	d.scr = screenTitle
+	if strings.Contains(d.View(), "available") {
+		t.Error("title should not show an update notice when disabled")
 	}
 }
 

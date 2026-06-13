@@ -30,6 +30,11 @@ type Model struct {
 	savePath string
 	saveErr  string
 
+	// release / update notice
+	version      string        // current build version, shown on the title screen
+	checkUpdate  func() string // off-render check; returns a newer version or "" (nil = disabled)
+	updateLatest string        // a newer release to advertise, once the check returns
+
 	// title
 	menuIdx int
 	// map
@@ -56,10 +61,15 @@ type Model struct {
 	resWasBoss bool
 }
 
-func New(lessons []content.Lesson, prog *progress.Progress, savePath string) Model {
+// New builds the root model. version is the current build (shown on the title
+// screen); checkUpdate is run once off the render path to learn whether a newer
+// release exists — it returns the newer version string or "" (pass nil to
+// disable the check entirely, e.g. for dev builds or in tests).
+func New(lessons []content.Lesson, prog *progress.Progress, savePath, version string, checkUpdate func() string) Model {
 	m := Model{
 		width: 80, height: 24,
 		lessons: lessons, prog: prog, savePath: savePath,
+		version: version, checkUpdate: checkUpdate,
 		combo: 1, actHeartsLost: map[int]bool{},
 	}
 	// A brand-new player meets the welcome screen before anything else.
@@ -74,12 +84,24 @@ func New(lessons []content.Lesson, prog *progress.Progress, savePath string) Mod
 // this is true and disappears for good once the first room is cleared.
 func (m *Model) isFreshPlayer() bool { return len(m.prog.Completed) == 0 }
 
-func (m Model) Init() tea.Cmd { return nil }
+// updateCheckedMsg carries the result of the off-render update check.
+type updateCheckedMsg struct{ latest string }
+
+func (m Model) Init() tea.Cmd {
+	if m.checkUpdate == nil {
+		return nil
+	}
+	check := m.checkUpdate
+	return func() tea.Msg { return updateCheckedMsg{latest: check()} }
+}
 
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.width, m.height = msg.Width, msg.Height
+		return m, nil
+	case updateCheckedMsg:
+		m.updateLatest = msg.latest
 		return m, nil
 	case tea.KeyMsg:
 		if msg.String() == "ctrl+c" {
