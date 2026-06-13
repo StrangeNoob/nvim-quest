@@ -90,6 +90,28 @@ func validateChallenge(t *testing.T, owner string, ch Challenge, needsParXP bool
 	if !valid {
 		t.Errorf("%s/%s: unknown goal type %q", owner, ch.ID, ch.Goal.Type)
 	}
+	switch ch.Goal.Type {
+	case "cursorOnWord", "wordDeleted":
+		if ch.Goal.Word == "" {
+			t.Errorf("%s/%s: goal %q needs a non-empty word", owner, ch.ID, ch.Goal.Type)
+		}
+	case "bufferEquals":
+		if len(ch.Goal.Lines) == 0 {
+			t.Errorf("%s/%s: bufferEquals goal needs non-empty lines", owner, ch.ID)
+		}
+	case "lineDeleted":
+		if ch.Goal.Line == "" {
+			t.Errorf("%s/%s: lineDeleted goal needs a non-empty line", owner, ch.ID)
+		}
+	case "containsText":
+		if ch.Goal.Text == "" {
+			t.Errorf("%s/%s: containsText goal needs non-empty text", owner, ch.ID)
+		}
+	case "searchMatchActive":
+		if ch.Goal.Term == "" {
+			t.Errorf("%s/%s: searchMatchActive goal needs a non-empty term", owner, ch.ID)
+		}
+	}
 	if needsParXP {
 		if ch.Par < 1 {
 			t.Errorf("%s/%s: par must be >= 1", owner, ch.ID)
